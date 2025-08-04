@@ -1,0 +1,20 @@
+# .gitignore
+
+# Secrets
+# This is the most important line for security.
+.env
+
+# Python / Django
+# Ignore the virtual environment folder
+/venv/
+# Ignore the local SQLite database
+db.sqlite3
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# IDE / OS specific
+# Ignore VS Code specific settings
+.vscode/
+# Ignore Mac specific files
+.DS_Store
