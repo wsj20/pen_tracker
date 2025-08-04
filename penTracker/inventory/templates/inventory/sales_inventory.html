@@ -3,14 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eBay Inventory</title>
+    <title>Pen Inventory</title>
 </head>
 <body>
     <h1>Current Inventory</h1>
-    <ul>
-        {% for pen in pens %}
-            <li>{{ pen.pen_model.brand }} {{ pen.pen_model.name }} ({{ pen.colour }}) ({{ pen.description }})</li>
-        {% endfor %}
-    </ul>
+
+    <table border="1"> <thead>
+            <tr>
+                <th>Model</th>
+                <th>Supplier</th>
+                <th>Colour</th>
+                <th>Description</th>
+                <th>Acq. Cost</th>
+                <th>Acq. Date</th>
+                <th>Refurb Note</th>
+                <th>Status</th>
+                <th>eBay ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pen in pens %}
+            <tr>
+                <td>{{ pen.pen_model }}</td>
+                <td>{{ pen.supplier }}</td>
+                <td>{{ pen.colour }}</td>
+                <td>{{ pen.description }}</td>
+
+                <td>£{{ pen.acquisition_cost }}</td>
+
+                <td>{{ pen.acquisition_date|date:"d M Y" }}</td>
+
+                <td>{{ pen.refurb_notes }}</td>
+
+                <td>{{ pen.get_status_display }}</td>
+
+                <td>{{ pen.ebay_item_id }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 </body>
 </html>
