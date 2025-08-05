@@ -16,7 +16,7 @@ class Expense(models.Model):
         (CATEGORY_OTHER, 'Other'),
     ]
 
-    description = models.TextField()
+    description = models.CharField(max_length=64)
     date_incurred = models.DateField()
     cost = models.DecimalField(max_digits=8, decimal_places=2)
     category = models.CharField(
