@@ -53,5 +53,20 @@ class Pen(models.Model):
         return f"{self.pen_model} - {self.colour} -- {self.description}"
 
 
-
+class Part(models.Model):
+    name = models.CharField(max_length=64)
+    quantity_on_hand = models.IntegerField()
+    pen_model = models.ForeignKey(PenModel, on_delete=models.SET_NULL, blank=True, null=True)
+    cost_per_unit = models.DecimalField(max_digits=8, decimal_places=2, blank=True, default=0)
+    description = models.TextField(blank=True)
     
+    def __str__(self):
+        return f"{self.pen_model} - {self.name} - {self.description}"
+    
+class PenPartsUsage(models.Model):
+    pen = models.ForeignKey(Pen, on_delete=models.CASCADE)
+    part = models.ForeignKey(Part, on_delete=models.PROTECT)
+    quantity_used = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantity_used} x {self.part.name} used on {self.pen}"
