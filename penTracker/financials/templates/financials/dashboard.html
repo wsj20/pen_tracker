@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Business Dashboard</h1>
+    
+    <a href="{% url 'pen-list' %}">Pen Inventory</a> | 
+    <a href="{% url 'part-list' %}">Parts Inventory</a> | 
+    <a href="{% url 'expense-list' %}">Expenses</a> |
+    <a href="{% url 'sale-list' %}">Sales</a>
+    <hr>
+
+    <h2>Overall Financials (All Time)</h2>
+    <table border="1">
+        <tr>
+            <th>Total Revenue</th>
+            <td>£{{ sales_revenue|floatformat:2 }}</td>
+        </tr>
+        <tr>
+            <th>Gross Profit</th>
+            <td>£{{ gross_profit }}</td>
+        </tr>
+        <tr>
+            <th>Total Expenses</th>
+            <td>£{{ total_expenses }}</td>
+        </tr>
+        <tr>
+            <th><strong>Net Profit</strong></th>
+            <td><strong>£{{ net_profit }}</strong></td>
+        </tr>
+    </table>
+    
+    <hr>
+    <h2>Year-over-Year Performance</h2>
+    <p>(The comparison chart will be added here later.)</p>
+</body>
+</html>

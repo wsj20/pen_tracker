@@ -35,7 +35,7 @@ class Sale(models.Model):
     final_sale_price = models.DecimalField(max_digits=8, decimal_places=2)
     shipping_charge = models.DecimalField(max_digits=8, decimal_places=2)
     transaction_fee = models.DecimalField(max_digits=8, decimal_places=2)
-    other_fees = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    other_fees = models.DecimalField(max_digits=8, decimal_places=2, default=0.61)
     shipping_cost = models.DecimalField(max_digits=8, decimal_places=2)
 
     def __str__(self):

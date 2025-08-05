@@ -11,6 +11,10 @@
                 <th>Date Sold</th>
                 <th>Pen Sold</th>
                 <th>Sale Price</th>
+                <th>Shipping Charged</th>
+                <th>Shipping Cost</th>
+                <th>Other Fees</th>
+                <th>Transaction Fees</th>
                 <th>Net Profit</th>
             </tr>
         </thead>
@@ -24,7 +28,11 @@
                     </a>
                 </td>
                 <td>£{{ sale.final_sale_price }}</td>
-                <td>£{{ sale.pen.calculate_net_profit|floatformat:2 }}</td>
+                <td>£{{ sale.shipping_charge }}</td>
+                <td>£{{ sale.shipping_cost }}</td>
+                <td>£{{ sale.other_fees }}</td>
+                <td>£{{ sale.transaction_fee }}</td>
+                <td>£{{ sale.pen.calculate_net_profit }}</td>
             </tr>
             {% endfor %}
         </tbody>

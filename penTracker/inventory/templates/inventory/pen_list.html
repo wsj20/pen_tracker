@@ -28,7 +28,11 @@
         <tbody>
             {% for pen in pens %}
             <tr>
-                <td>{{ pen.pen_model }}</td>
+                <td>
+                    <a href="{% url 'pen-edit' pen.pk %}">
+                        {{ pen.pen_model }}
+                    </a>
+                </td>
                 <td>{{ pen.supplier }}</td>
                 <td>{{ pen.colour }}</td>
                 <td>{{ pen.description }}</td>
