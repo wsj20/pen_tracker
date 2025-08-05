@@ -3,6 +3,14 @@ from .models import Pen, PenModel, Supplier
 
 #Main add pen form: /add/
 class PenForm(forms.ModelForm):
+
+    #Add date picker
+    acquisition_date = forms.DateField(
+        widget=forms.DateInput(
+            attrs={'type':'date'}
+        )
+    )
+
     class Meta:
         model = Pen
         fields = [
@@ -13,6 +21,7 @@ class PenForm(forms.ModelForm):
             'acquisition_cost', 
             'acquisition_date', 
             'status', 
+            'ebay_item_id',
             'refurb_note'
         ]
 

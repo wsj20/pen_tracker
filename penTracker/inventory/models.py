@@ -1,9 +1,14 @@
 from django.db import models
+from django.db.models.functions import Length
 
 # Create your models here.
 class PenModel(models.Model):
     brand = models.CharField(max_length=32)
     name = models.CharField(max_length=32)
+
+    #Organising list by brand, length of name then by name itelf
+    class Meta:
+        ordering = ['brand', Length('name'), 'name']
 
     def __str__(self):
         return f"{self.brand} {self.name}"
