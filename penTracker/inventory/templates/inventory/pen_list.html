@@ -7,7 +7,8 @@
 </head>
 <body>
     <h1>Current Inventory</h1>
-
+    <a href="{% url 'pen-add' %}"><button>Add New Pen</button></a>
+    <br><br>
     <table border="1"> <thead>
             <tr>
                 <th>Model</th>
@@ -33,7 +34,7 @@
 
                 <td>{{ pen.acquisition_date|date:"d M Y" }}</td>
 
-                <td>{{ pen.refurb_notes }}</td>
+                <td>{{ pen.refurb_note }}</td>
 
                 <td>{{ pen.get_status_display }}</td>
 

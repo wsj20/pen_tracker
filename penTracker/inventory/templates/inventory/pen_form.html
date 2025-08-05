@@ -1,0 +1,30 @@
+...
+<h1>Add/Edit Pen</h1>
+<form method="post">
+    {% csrf_token %}
+
+    <p>
+        <label for="{{ form.pen_model.id_for_label }}">Pen Model:</label>
+        {{ form.pen_model }}
+        <a href="{% url 'pen-model-add' %}">(+) Add New</a>
+    </p>
+
+    <p>
+        <label for="{{ form.supplier.id_for_label }}">Supplier:</label>
+        {{ form.supplier }}
+        <a href="{% url 'pen-supplier-add' %}">(+) Add New</a>
+    <p>
+        <label for="{{ form.colour.id_for_label }}">Colour:</label>
+        {{ form.colour }}
+    </p>
+    
+    <p>{{ form.description.label_tag }} {{ form.description }}</p>
+    <p>{{ form.acquisition_cost.label_tag }} {{ form.acquisition_cost }}</p>
+    <p>{{ form.acquisition_date.label_tag }} {{ form.acquisition_date }}</p>
+    <p>{{ form.status.label_tag }} {{ form.status }}</p>
+    <p>{{ form.refurb_notes.label_tag }} {{ form.refurb_notes }}</p>
+    <p>{{ form.ebay_item_id.label_tag }} {{ form.ebay_item_id }}</p>
+
+    <button type="submit">Save Pen</button>
+</form>
+...

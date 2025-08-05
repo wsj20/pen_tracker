@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Pen Supplier</title>
+</head>
+<body>
+    <h1>Add a New Pen Supplier</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Supplier</button>
+    </form>
+    <br>
+    <a href="{% url 'pen-add' %}">Cancel and return to Add Pen form</a>
+</body>
+</html>
