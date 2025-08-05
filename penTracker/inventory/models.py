@@ -66,7 +66,8 @@ class Part(models.Model):
 class PenPartsUsage(models.Model):
     pen = models.ForeignKey(Pen, on_delete=models.CASCADE)
     part = models.ForeignKey(Part, on_delete=models.PROTECT)
-    quantity_used = models.PositiveIntegerField(default=1)
+    quantity_used = models.IntegerField(default=1)
+    cost_at_time_of_use = models.DecimalField(max_digits=8, decimal_places=2)
 
     def __str__(self):
         return f"{self.quantity_used} x {self.part.name} used on {self.pen}"

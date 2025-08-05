@@ -26,8 +26,45 @@
     <hr>
 
     <h3>Parts Used</h3>
-    <p>(This section will be built in Module 3)</p>
-    
+    {% if parts_used %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Part Name</th>
+                    <th>Quantity</th>
+                    <th>Cost When Used</th> <th>Actions</th>       </tr>
+            </thead>
+            <tbody>
+                {% for usage in parts_used %}
+                <tr>
+                    <td>{{ usage.part.name }}</td>
+                    <td>{{ usage.quantity_used }}</td>
+                    <td>£{{ usage.cost_at_time_of_use }}</td>
+                    <td>
+                        <form method="post" action="{% url 'part-usage-delete' usage.pk %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" onclick="return confirm('Are you sure you want to remove this part record? This will add the quantity back to your main parts inventory.');">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No parts have been recorded for this refurbishment yet.</p>
+    {% endif %}
+
+    <br>
+
+    <h4>Add Part Used:</h4>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Part to Refurbishment</button>
+    </form>
+
     <h3>Sale Information</h3>
     <p>(This section will be built in Module 4)</p>
 

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Pen, PenModel, Supplier, Part
+from .models import Pen, PenModel, Supplier, Part, PenPartsUsage
 
 #Main add pen form: /add/
 class PenForm(forms.ModelForm):
@@ -53,4 +53,18 @@ class PartForm(forms.ModelForm):
             'quantity_on_hand',
             'cost_per_unit',
             'description'
+        ]
+
+class PenPartUsageForm(forms.ModelForm):
+
+    quantity_used = forms.IntegerField(
+        initial=1,
+        min_value=1
+    )
+
+    class Meta:
+        model = PenPartsUsage
+        fields = [
+            'part',
+            'quantity_used'
         ]

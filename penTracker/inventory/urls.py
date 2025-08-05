@@ -13,4 +13,5 @@ urlpatterns = [
     path('parts/add/', views.add_part, name='part-add'),
     path('parts/<int:pk>/edit/', views.edit_part, name='part-edit'),
     path('parts/<int:pk>/delete/', views.delete_part, name='part-delete'),
+    path('usage/<int:pk>/delete/', views.delete_part_usage, name='part-usage-delete'),
 ]

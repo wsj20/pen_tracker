@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Pen
-from .forms import PenForm, PenModelForm, PenSupplierForm, Part, PartForm
+from .forms import PenForm, PenModelForm, PenSupplierForm, Part, PartForm, PenPartUsageForm, PenPartsUsage
 
 # Create your views here.
 
@@ -80,9 +80,34 @@ def add_pen_supplier(request):
 
 def pen_detail(request, pk):
     pen = get_object_or_404(Pen, pk=pk)
+    
+    if request.method == 'POST':
+        form = PenPartUsageForm(request.POST)
+        if form.is_valid():
+            # Create the object in memory but don't save to the database just yet
+            usage = form.save(commit=False)
+            # Assign the current pen to the 'pen' field of the usage record
+            usage.pen = pen
+            usage.cost_at_time_of_use = usage.part.cost_per_unit
+            usage.save()
 
+            # Update Parts Inventory
+            # Get the part that was just used
+            part_used = usage.part
+            # Decrease its quantity_on_hand by the amount used
+            part_used.quantity_on_hand -= usage.quantity_used
+            part_used.save()
+
+            return redirect('pen-detail', pk=pen.pk)
+    else:
+        form = PenPartUsageForm()
+
+    parts_used = PenPartsUsage.objects.filter(pen=pen)
+    
     context = {
-        'pen': pen
+        'pen': pen,
+        'parts_used': parts_used,  #Pass the list to the template
+        'form': form,              #Pass the blank form to the template
     }
     return render(request, 'inventory/pen_detail.html', context)
 
@@ -128,3 +153,23 @@ def delete_part(request, pk):
         pen_to_delete.delete()
         return redirect('part-list')
     return redirect('part-list')
+
+def delete_part_usage(request, pk):
+    usage_to_delete = get_object_or_404(PenPartsUsage, pk=pk)
+    # We need to know which pen's detail page to redirect back to
+    pen_id = usage_to_delete.pen.pk
+
+    if request.method == 'POST':
+        # Reverse the inventory change
+        # Get the part associated with this usage record
+        part_to_reimburse = usage_to_delete.part
+        # Add the quantity from the usage record back to the main inventory
+        part_to_reimburse.quantity_on_hand += usage_to_delete.quantity_used
+        part_to_reimburse.save()
+
+        # Now that the inventory is corrected, delete the usage record itself
+        usage_to_delete.delete()
+        
+        return redirect('pen-detail', pk=pen_id)
+
+    return redirect('pen-detail', pk=pen_id)
