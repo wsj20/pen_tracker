@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Pen
-from .forms import PenForm, PenModelForm, PenSupplierForm
+from .forms import PenForm, PenModelForm, PenSupplierForm, Part, PartForm
 
 # Create your views here.
 
@@ -85,3 +85,46 @@ def pen_detail(request, pk):
         'pen': pen
     }
     return render(request, 'inventory/pen_detail.html', context)
+
+def part_list(request):
+    all_parts = Part.objects.order_by('description')
+    context = {
+        'parts': all_parts
+    }
+    return render(request, 'inventory/part_list.html', context)
+
+def add_part(request):
+    if request.method == "POST":
+        form = PartForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('part-list')
+    else:
+        form = PartForm()
+    context = {
+        'form':form
+    }
+    return render(request, 'inventory/part_form.html', context)
+
+def edit_part(request, pk):
+    part_to_edit = get_object_or_404(Part, pk=pk)
+
+    if request.method == 'POST':
+        form = PartForm(request.POST, instance=part_to_edit)
+        if form.is_valid():
+            form.save()
+            return redirect('part-list')
+    else:
+        form = PartForm(instance=part_to_edit)
+    context = {
+        'form': form,
+    }
+    return render(request, 'inventory/part_form.html', context)
+
+def delete_part(request, pk):
+    pen_to_delete = get_object_or_404(Part, pk=pk)
+
+    if request.method == "POST":
+        pen_to_delete.delete()
+        return redirect('part-list')
+    return redirect('part-list')

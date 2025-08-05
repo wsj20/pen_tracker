@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Parts Inventory</title>
+</head>
+<body>
+    <h1>Parts Inventory</h1>
+    <a href="{% url 'part-add' %}"><button>Add New Part</button></a>
+    <br><br>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>For Model</th>
+                <th>Quantity on Hand</th>
+                <th>Cost per Unit</th>
+                <th>Actions</th> </tr>
+                <th>Description</th>
+        </thead>
+        <tbody>
+            {% for part in parts %}
+            <tr>
+                <td>{{ part.name }}</td>
+                <td>{{ part.pen_model|default:"Generic" }}</td>
+                <td>{{ part.quantity_on_hand }}</td>
+                <td>£{{ part.cost_per_unit }}</td>
+                <td>{{ part.description }}</td>
+                <td>
+                    <form method="get" action="{% url 'part-edit' part.pk %}" style="display: inline;">
+                    <button>Edit</button>
+                    <form method="post" action="{% url 'part-delete' part.pk %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" 
+                                onclick="return confirm('Are you sure you want to delete \'{{ part.name }}\'?');">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <a href="{% url 'pen-list' %}">Back to Pen Inventory</a>
+</body>
+</html>

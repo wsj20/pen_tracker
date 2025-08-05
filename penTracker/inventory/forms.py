@@ -1,5 +1,5 @@
 from django import forms
-from .models import Pen, PenModel, Supplier
+from .models import Pen, PenModel, Supplier, Part
 
 #Main add pen form: /add/
 class PenForm(forms.ModelForm):
@@ -41,4 +41,16 @@ class PenSupplierForm(forms.ModelForm):
         fields = [
             'name',
             'website'
+        ]
+
+#Part Form
+class PartForm(forms.ModelForm):
+    class Meta:
+        model = Part
+        fields = [
+            'name',
+            'pen_model',
+            'quantity_on_hand',
+            'cost_per_unit',
+            'description'
         ]

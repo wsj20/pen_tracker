@@ -9,4 +9,8 @@ urlpatterns = [
     path('<int:pk>/', views.pen_detail, name='pen-detail'),
     path('<int:pk>/edit/', views.edit_pen, name='pen-edit'),
     path('<int:pk>/delete/', views.delete_pen, name='pen-delete'),
+    path('parts/', views.part_list, name='part-list'),
+    path('parts/add/', views.add_part, name='part-add'),
+    path('parts/<int:pk>/edit/', views.edit_part, name='part-edit'),
+    path('parts/<int:pk>/delete/', views.delete_part, name='part-delete'),
 ]
