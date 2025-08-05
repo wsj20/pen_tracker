@@ -25,6 +25,35 @@ def add_pen(request):
     context = {'form': form}
     return render(request, 'inventory/pen_form.html', context)
 
+#Delete Specified Pen
+def delete_pen(request, pk):
+    pen_to_delete = get_object_or_404(Pen, pk=pk)
+
+    if request.method == "POST":
+        pen_to_delete.delete()
+        return redirect('pen-list')
+    return redirect('pen-list')
+
+# MAINLY FOR JS LATER BUT ADDED NOW
+def edit_pen(request, pk):
+    pen_to_edit = get_object_or_404(Pen, pk=pk)
+
+    if request.method == 'POST':
+        # When the user saves, populate the form with the submitted data
+        # AND specify the instance to update the correct pen record.
+        form = PenForm(request.POST, instance=pen_to_edit)
+        if form.is_valid():
+            form.save()
+            return redirect('pen-list')
+    else:
+        # For the initial GET request, populate the form with the existing pen's data
+        form = PenForm(instance=pen_to_edit)
+    
+    context = {
+        'form': form,
+    }
+    return render(request, 'inventory/pen_form.html', context)
+
 #Add new pen model:
 def add_pen_model(request):
     if request.method == 'POST':

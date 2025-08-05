@@ -7,9 +7,13 @@
 </head>
 <body>
     <h1>Current Inventory</h1>
+
     <a href="{% url 'pen-add' %}"><button>Add New Pen</button></a>
+    
     <br><br>
-    <table border="1"> <thead>
+
+    <table border="1">
+        <thead>
             <tr>
                 <th>Model</th>
                 <th>Supplier</th>
@@ -17,10 +21,10 @@
                 <th>Description</th>
                 <th>Acq. Cost</th>
                 <th>Acq. Date</th>
-                <th>Refurb Note</th>
                 <th>Status</th>
+                <th>Refurb Notes</th>
                 <th>eBay ID</th>
-            </tr>
+                <th>Actions</th> </tr>
         </thead>
         <tbody>
             {% for pen in pens %}
@@ -29,16 +33,21 @@
                 <td>{{ pen.supplier }}</td>
                 <td>{{ pen.colour }}</td>
                 <td>{{ pen.description }}</td>
-
                 <td>£{{ pen.acquisition_cost }}</td>
-
                 <td>{{ pen.acquisition_date|date:"d M Y" }}</td>
-
-                <td>{{ pen.refurb_note }}</td>
-
                 <td>{{ pen.get_status_display }}</td>
-
-                <td>{{ pen.ebay_item_id }}</td>
+                <td>{{ pen.refurb_note|default:"--" }}</td>
+                <td>{{ pen.ebay_item_id|default:"--" }}</td>
+                
+                <td>
+                    <form method="post" action="{% url 'pen-delete' pen.pk %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" 
+                                onclick="return confirm('Are you sure you want to delete \'{{ pen.pen_model }} ({{ pen.colour }})\'?');">
+                            Delete
+                        </button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
