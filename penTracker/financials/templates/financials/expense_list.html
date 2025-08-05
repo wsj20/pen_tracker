@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Expense List</title>
+</head>
+<body>
+    <h1>Expenses</h1>
+    <a href="{% url 'expense-add' %}"><button>Add New Expense</button></a>
+    <br><br>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Date Incurred</th>
+                <th>Cost</th>
+                <th>Category</th>
+                </tr>
+        </thead>
+        <tbody>
+            {% for expense in expenses %}
+            <tr>
+                <td>{{ expense.description }}</td>
+                <td>{{ expense.date_incurred|date:"d M Y" }}</td>
+                <td>£{{ expense.cost }}</td>
+                <td>{{ expense.get_category_display }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <a href="{% url 'pen-list' %}">Back to Pen Inventory</a>
+</body>
+</html>

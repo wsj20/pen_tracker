@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Expense</title>
+</head>
+<body>
+    <h1>Add a New Expense</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Expense</button>
+    </form>
+    <br>
+    <a href="{% url 'expense-list' %}">Cancel and return to list</a>
+</body>
+</html>
