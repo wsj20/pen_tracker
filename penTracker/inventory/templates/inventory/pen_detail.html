@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ pen.pen_model }}</title>
+</head>
+<body>
+    <h1>{{ pen.pen_model }} ({{ pen.colour }})</h1>
+    
+    <a href="{% url 'pen-list' %}">Back to Full Inventory</a>
+    |
+    <a href="{% url 'pen-edit' pen.pk %}">Edit This Pen</a>
+    <hr>
+
+    <h3>Pen Details</h3>
+    <ul>
+        <li><strong>Supplier:</strong> {{ pen.supplier|default:"N/A" }}</li>
+        <li><strong>Description:</strong> {{ pen.description|default:"No description." }}</li>
+        <li><strong>Acquisition Cost:</strong> £{{ pen.acquisition_cost }}</li>
+        <li><strong>Acquisition Date:</strong> {{ pen.acquisition_date|date:"d M Y" }}</li>
+        <li><strong>Status:</strong> {{ pen.get_status_display }}</li>
+        <li><strong>eBay ID:</strong> {{ pen.ebay_item_id|default:"Not Listed" }}</li>
+        <li><strong>Refurbishment Notes:</strong> {{ pen.refurb_note|default:"No notes." }}</li>
+    </ul>
+
+    <hr>
+
+    <h3>Parts Used</h3>
+    <p>(This section will be built in Module 3)</p>
+    
+    <h3>Sale Information</h3>
+    <p>(This section will be built in Module 4)</p>
+
+</body>
+</html>

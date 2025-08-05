@@ -77,3 +77,11 @@ def add_pen_supplier(request):
         form = PenSupplierForm()
     context = {'form':form}
     return render(request, 'inventory/pen_supplier_form.html', context)
+
+def pen_detail(request, pk):
+    pen = get_object_or_404(Pen, pk=pk)
+
+    context = {
+        'pen': pen
+    }
+    return render(request, 'inventory/pen_detail.html', context)

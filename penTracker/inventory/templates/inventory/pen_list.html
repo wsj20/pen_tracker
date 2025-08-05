@@ -22,7 +22,6 @@
                 <th>Acq. Cost</th>
                 <th>Acq. Date</th>
                 <th>Status</th>
-                <th>Refurb Notes</th>
                 <th>eBay ID</th>
                 <th>Actions</th> </tr>
         </thead>
@@ -36,10 +35,11 @@
                 <td>£{{ pen.acquisition_cost }}</td>
                 <td>{{ pen.acquisition_date|date:"d M Y" }}</td>
                 <td>{{ pen.get_status_display }}</td>
-                <td>{{ pen.refurb_note|default:"--" }}</td>
                 <td>{{ pen.ebay_item_id|default:"--" }}</td>
                 
                 <td>
+                    <form method="post" action="{% url 'pen-detail' pen.pk %}" style="display: inline;">
+                        <button>Details</button>
                     <form method="post" action="{% url 'pen-delete' pen.pk %}" style="display: inline;">
                         {% csrf_token %}
                         <button type="submit" 
