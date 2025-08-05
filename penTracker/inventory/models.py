@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.functions import Length
+from django.db.models import Sum
 
 # Create your models here.
 class PenModel(models.Model):
@@ -51,7 +52,21 @@ class Pen(models.Model):
 
     def __str__(self):
         return f"{self.pen_model} - {self.colour} -- {self.description}"
+    
+    def calculate_net_profit(self):
+        if not hasattr(self, 'sale'):
+            return None
+        
+        parts_costs_result = self.parts_used.aggregate(
+            total=Sum('cost_at_time_of_use')
+        )
 
+        parts_cost = parts_costs_result['total'] or 0
+        total_fees = self.sale.transaction_fee + self.sale.other_fees
+        revenue = self.sale.final_sale_price + self.sale.shipping_charge
+        total_costs = self.acquisition_cost + parts_cost + self.sale.shipping_cost + total_fees
+
+        return revenue - total_costs
 
 class Part(models.Model):
     name = models.CharField(max_length=64)
@@ -64,7 +79,7 @@ class Part(models.Model):
         return f"{self.pen_model} - {self.name} - {self.description}"
     
 class PenPartsUsage(models.Model):
-    pen = models.ForeignKey(Pen, on_delete=models.CASCADE)
+    pen = models.ForeignKey(Pen, on_delete=models.CASCADE, related_name='parts_used')
     part = models.ForeignKey(Part, on_delete=models.PROTECT)
     quantity_used = models.IntegerField(default=1)
     cost_at_time_of_use = models.DecimalField(max_digits=8, decimal_places=2)

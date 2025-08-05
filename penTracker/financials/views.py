@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Expense, Sale
-from .forms import ExpenseForm
+from .forms import ExpenseForm, SaleForm
+from inventory.models import Pen
 
 # Create your views here.
 def expense_list(request):
@@ -43,3 +44,34 @@ def delete_expense(request, pk):
         return redirect('expense-list')
     
     return redirect('expense-list')
+
+def record_sale(request, pen_pk):
+    pen_to_sell = get_object_or_404(Pen, pk=pen_pk)
+
+    if request.method == "POST":
+        form = SaleForm(request.POST)
+        if form.is_valid():
+            sale = form.save(commit=False)
+            sale.pen = pen_to_sell
+            sale.save()
+
+            pen_to_sell.status = Pen.STATUS_SOLD
+            pen_to_sell.save()
+
+            return redirect('pen-detail', pk=pen_to_sell.pk)
+        
+    else:
+        form = SaleForm()
+
+    context = {
+        'form':form,
+        'pen':pen_to_sell
+    }
+    return render(request, 'financials/sale_form.html', context)
+
+def sale_list(request):
+    all_sales = Sale.objects.all().order_by('-date_sold')
+    context={
+        'sales': all_sales
+    }
+    return render(request, 'financials/sale_list.html', context)

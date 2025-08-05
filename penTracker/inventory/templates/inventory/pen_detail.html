@@ -66,7 +66,11 @@
     </form>
 
     <h3>Sale Information</h3>
-    <p>(This section will be built in Module 4)</p>
+    {% if pen.status == pen.STATUS_SOLD %}
+    <p>This pen has been sold. Details will be displayed here.</p>
+    {% else %}
+    <a href="{% url 'sale-record' pen.pk %}"><button>+ Record Sale</button></a>
+    {% endif %}
 
 </body>
 </html>

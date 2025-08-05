@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Record Sale for {{ pen.pen_model }}</title>
+</head>
+<body>
+    <h1>Record Sale for {{ pen.pen_model }} ({{ pen.colour }})</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Sale</button>
+    </form>
+    <br>
+    <a href="{% url 'pen-detail' pen.pk %}">Cancel</a>
+</body>
+</html>

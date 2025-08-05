@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>All Sales</title>
+</head>
+<body>
+    <h1>All Sales</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Date Sold</th>
+                <th>Pen Sold</th>
+                <th>Sale Price</th>
+                <th>Net Profit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sale in sales %}
+            <tr>
+                <td>{{ sale.date_sold|date:"d M Y" }}</td>
+                <td>
+                    <a href="{% url 'pen-detail' sale.pen.pk %}">
+                        {{ sale.pen }}
+                    </a>
+                </td>
+                <td>£{{ sale.final_sale_price }}</td>
+                <td>£{{ sale.pen.calculate_net_profit|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <a href="#">Back to Dashboard</a> </body>
+</html>
