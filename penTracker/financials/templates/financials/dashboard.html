@@ -4,8 +4,11 @@
     <title>Dashboard</title>
 </head>
 <body>
+    <form method="post" action="{% url 'logout' %}" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
     <h1>Business Dashboard</h1>
-    
     <a href="{% url 'pen-list' %}">Pen Inventory</a> | 
     <a href="{% url 'part-list' %}">Parts Inventory</a> | 
     <a href="{% url 'expense-list' %}">Expenses</a> |
