@@ -7,6 +7,8 @@
 </head>
 <body>
     <h1>Expenses</h1>
+    <a href="{% url 'expense-add' %}"><button>+ Add New Expense</button></a>
+    <br><br>
     <table border="1">
         <thead>
             <tr>
@@ -25,8 +27,8 @@
                 <td>£{{ expense.cost }}</td>
                 <td>{{ expense.get_category_display }}</td>
                 <td>
-                    <a href="{% url 'expense-edit' expense.pk %}">Edit</a>
-                    |
+                    <form method="get" action="{% url 'expense-edit' expense.pk %}" style="display: inline;">
+                    <button>Edit</button>
                     <form method="post" action="{% url 'expense-delete' expense.pk %}" style="display: inline;">
                         {% csrf_token %}
                         <button type="submit" 

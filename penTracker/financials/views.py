@@ -78,6 +78,35 @@ def sale_list(request):
     }
     return render(request, 'financials/sale_list.html', context)
 
+def edit_sale(request, pk):
+    sale_to_edit = get_object_or_404(Sale, pk=pk)
+    if request.method == 'POST':
+        form = SaleForm(request.POST, instance=sale_to_edit)
+        if form.is_valid():
+            form.save()
+            return redirect('sale-list')
+    else:
+        form = SaleForm(instance=sale_to_edit)
+    
+    context = {
+        'form': form,
+        'pen': sale_to_edit.pen
+    }
+    return render(request, 'financials/sale_form.html', context)
+
+def delete_sale(request, pk):
+    sale_to_delete = get_object_or_404(Sale, pk=pk)
+    if request.method == 'POST':
+        pen = sale_to_delete.pen
+        #et pen to back instock if deleting the sale record
+        pen.status = Pen.STATUS_IN_STOCK
+        pen.save()
+        
+        sale_to_delete.delete()
+        return redirect('sale-list')
+    
+    return redirect('sale-list')
+
 def dashboard(request):
     # --- 1. Calculate Total Revenue ---
     sales_revenue = Sale.objects.aggregate(
@@ -105,14 +134,14 @@ def dashboard(request):
 
     TWO_PLACES = Decimal('0.01')
     # --- 4. Final Calculations ---
-    gross_profit = (sales_revenue - cost_of_goods_sold).quantize(TWO_PLACES)
-    total_business_expenses = (refurbishment_costs + sales_shipping_costs + general_expenses).quantize(TWO_PLACES)
-    net_profit = (gross_profit - total_business_expenses).quantize(TWO_PLACES)
+    gross_profit = (sales_revenue - cost_of_goods_sold)
+    total_business_expenses = (refurbishment_costs + sales_shipping_costs + general_expenses)
+    net_profit = (gross_profit - total_business_expenses)
 
     context = {
-        'sales_revenue': sales_revenue,
-        'gross_profit': gross_profit,
-        'total_expenses': total_business_expenses,
-        'net_profit': net_profit,
+        'sales_revenue': sales_revenue.quantize(TWO_PLACES),
+        'gross_profit': gross_profit.quantize(TWO_PLACES),
+        'total_expenses': total_business_expenses.quantize(TWO_PLACES),
+        'net_profit': net_profit.quantize(TWO_PLACES),
     }
     return render(request, 'financials/dashboard.html', context)

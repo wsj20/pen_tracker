@@ -42,7 +42,7 @@
                 <td>{{ pen.ebay_item_id|default:"--" }}</td>
                 
                 <td>
-                    <form method="post" action="{% url 'pen-detail' pen.pk %}" style="display: inline;">
+                    <form method="get" action="{% url 'pen-detail' pen.pk %}" style="display: inline;">
                         <button>Details</button>
                     <form method="post" action="{% url 'pen-delete' pen.pk %}" style="display: inline;">
                         {% csrf_token %}

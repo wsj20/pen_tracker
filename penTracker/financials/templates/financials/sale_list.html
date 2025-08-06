@@ -16,6 +16,7 @@
                 <th>Other Fees</th>
                 <th>Transaction Fees</th>
                 <th>Net Profit</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -32,11 +33,22 @@
                 <td>£{{ sale.shipping_cost }}</td>
                 <td>£{{ sale.other_fees }}</td>
                 <td>£{{ sale.transaction_fee }}</td>
-                <td>£{{ sale.pen.calculate_net_profit }}</td>
+                <td>£{{ sale.pen.calculate_net_profit|floatformat:2 }}</td>
+                <td>
+                <form method="get" action="{% url 'sale-edit' sale.pk %}" style="display: inline;">
+                <button>Edit</button>
+                <form method="post" action="{% url 'sale-delete' sale.pk %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" 
+                            onclick="return confirm('Are you sure you want to delete the sale record for {{ sale.pen }}? This will reset the pen\'s status to In Stock.');">
+                        Delete
+                    </button>
+                </form>
+            </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     <br>
-    <a href="#">Back to Dashboard</a> </body>
+    <a href="{% url 'dashboard' %}">Back to Dashboard</a> </body>
 </html>
