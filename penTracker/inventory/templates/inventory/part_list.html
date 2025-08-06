@@ -4,6 +4,18 @@
     <title>Parts Inventory</title>
 </head>
 <body>
+    <nav>
+        <a href="{% url 'home' %}">Dashboard</a> |
+        <a href="{% url 'pen-list' %}">Pen Inventory</a> |
+        <a href="{% url 'part-list' %}">Parts Inventory</a> |
+        <a href="{% url 'expense-list' %}">Expenses</a> |
+        <a href="{% url 'sale-list' %}">All Sales</a> |
+        <form method="post" action="{% url 'logout' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </nav>
+
     <h1>Parts Inventory</h1>
     <a href="{% url 'part-add' %}"><button>Add New Part</button></a>
     <br><br>
