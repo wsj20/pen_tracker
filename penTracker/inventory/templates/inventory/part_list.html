@@ -26,8 +26,8 @@
                 <td>£{{ part.cost_per_unit }}</td>
                 <td>{{ part.description }}</td>
                 <td>
-                    <form method="get" action="{% url 'part-edit' part.pk %}" style="display: inline;">
-                    <button>Edit</button>
+                    <a href="{% url 'part-edit' part.pk %}">Edit</a>
+                    |
                     <form method="post" action="{% url 'part-delete' part.pk %}" style="display: inline;">
                         {% csrf_token %}
                         <button type="submit" 

@@ -27,8 +27,8 @@
                 <td>£{{ expense.cost }}</td>
                 <td>{{ expense.get_category_display }}</td>
                 <td>
-                    <form method="get" action="{% url 'expense-edit' expense.pk %}" style="display: inline;">
-                    <button>Edit</button>
+                    <a href="{% url 'expense-edit' expense.pk %}">Edit</a>
+                    |
                     <form method="post" action="{% url 'expense-delete' expense.pk %}" style="display: inline;">
                         {% csrf_token %}
                         <button type="submit" 

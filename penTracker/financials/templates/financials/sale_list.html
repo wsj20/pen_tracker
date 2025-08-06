@@ -35,8 +35,8 @@
                 <td>£{{ sale.transaction_fee }}</td>
                 <td>£{{ sale.pen.calculate_net_profit|floatformat:2 }}</td>
                 <td>
-                <form method="get" action="{% url 'sale-edit' sale.pk %}" style="display: inline;">
-                <button>Edit</button>
+                <a href="{% url 'sale-edit' sale.pk %}">Edit Sale</a>
+                |
                 <form method="post" action="{% url 'sale-delete' sale.pk %}" style="display: inline;">
                     {% csrf_token %}
                     <button type="submit" 
