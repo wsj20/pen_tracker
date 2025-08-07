@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Expense, Sale
 from .forms import ExpenseForm, SaleForm
 from inventory.models import Pen, PenPartsUsage
-from django.db.models import Sum, F
+from django.db.models import Sum, F, Q
 from decimal import Decimal
 from .utils import get_tax_year_dates
 import csv
@@ -82,9 +82,18 @@ def record_sale(request, pen_pk):
 
 @login_required
 def sale_list(request):
-    all_sales = Sale.objects.all().order_by('-date_sold')
-    context={
-        'sales': all_sales
+
+    query = request.GET.get('q')
+    sales_queryset = Sale.objects.all().order_by('-date_sold')
+    
+    if query:
+        sales_queryset = sales_queryset.filter(
+            Q(pen__pen_model__brand__icontains=query) |
+            Q(pen__pen_model__name__icontains=query)
+        )
+    
+    context = {
+        'sales': sales_queryset
     }
     return render(request, 'financials/sale_list.html', context)
 

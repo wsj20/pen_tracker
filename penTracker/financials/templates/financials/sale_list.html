@@ -5,6 +5,11 @@
 {% block content %}
     <h1>All Sales</h1>
 
+    <form method="get" action="{% url 'sale-list' %}">
+        <input type="text" name="q" placeholder="Search by Brand or Model..." value="{{ request.GET.q }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
     <div class="table-container">
         <table>
             <thead>
