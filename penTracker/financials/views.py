@@ -162,6 +162,12 @@ def dashboard(request):
     total_business_expenses = (refurbishment_costs + sales_shipping_costs + general_expenses).quantize(Decimal('0.01'))
     net_profit = (gross_profit - total_business_expenses).quantize(Decimal('0.01'))
 
+    if net_profit >= 0:
+        net_profit_class = 'is-positive'
+    else:
+        net_profit_class = 'is-negative'
+
+
     context = {
         'tax_year_start': start_date,
         'tax_year_end': end_date,
@@ -169,6 +175,7 @@ def dashboard(request):
         'gross_profit': gross_profit,
         'total_expenses': total_business_expenses,
         'net_profit': net_profit,
+        'net_profit_class': net_profit_class,
     }
     return render(request, 'financials/dashboard.html', context)
 

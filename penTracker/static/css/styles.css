@@ -265,13 +265,23 @@ form textarea:focus {
     color: #212529;
 }
 
-.stat-card.net-profit {
-    background-color: #28a745;
+.stat-card.is-positive {
+    background-color: #167e2e;
     color: white;
 }
 
-.stat-card.net-profit .stat-card-label,
-.stat-card.net-profit .stat-card-value {
+.stat-card.is-positive .stat-card-label,
+.stat-card.is-positive .stat-card-value {
+    color: white;
+}
+
+.stat-card.is-negative {
+    background-color: #811520; 
+    color: white;
+}
+
+.stat-card.is-negative .stat-card-label,
+.stat-card.is-negative .stat-card-value {
     color: white;
 }
 

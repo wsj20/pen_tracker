@@ -18,7 +18,7 @@
                 <div class="stat-card-label">Total Expenses</div>
                 <div class="stat-card-value">£{{ total_expenses|floatformat:2 }}</div>
             </div>
-            <div class="stat-card net-profit"> <div class="stat-card-label">Net Profit</div>
+            <div class="stat-card {{ net_profit_class }}"> <div class="stat-card-label">Net Profit</div>
                 <div class="stat-card-value">£{{ net_profit|floatformat:2 }}</div>
             </div>
         </div>
