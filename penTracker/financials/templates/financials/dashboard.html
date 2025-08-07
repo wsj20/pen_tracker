@@ -4,7 +4,7 @@
 
 {% block content %}
     <h1>Business Dashboard</h1>
-        <h2>Overall Financials (All Time)</h2>
+        <h2>Overall Financials ({{ tax_year_start|date:"d M Y" }} - {{ tax_year_end|date:"d M Y" }})</h2>
         <div class="stat-card-container">
             <div class="stat-card">
                 <div class="stat-card-label">Total Revenue</div>

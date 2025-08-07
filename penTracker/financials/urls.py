@@ -13,4 +13,8 @@ urlpatterns = [
     path('record-sale/<int:pen_pk>/', views.record_sale, name='sale-record'),
     path('sales/<int:pk>/edit/', views.edit_sale, name='sale-edit'),
     path('sales/<int:pk>/delete/', views.delete_sale, name='sale-delete'),
+
+    path('reports/', views.reports_hub, name='reports'),
+    path('reports/<int:year>/', views.yearly_report, name='yearly-report'),
+    path('reports/<int:year>/download-sales/', views.download_sales_csv, name='download-sales-csv'),
 ]

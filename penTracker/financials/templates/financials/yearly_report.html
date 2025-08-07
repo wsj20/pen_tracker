@@ -1,0 +1,29 @@
+{% extends "inventory/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Financial Report for {{ tax_year_start|date:"d M Y" }} - {{ tax_year_end|date:"d M Y" }}</h1>
+        <div>
+            <a href="{% url 'download-sales-csv' tax_year_start.year %}" class="btn btn-primary">Download Sales CSV</a>
+        </div>
+    </div>
+    <div class="stat-card-container">
+        <div class="stat-card">
+            <div class="stat-card-label">Total Revenue</div>
+            <div class="stat-card-value">£{{ sales_revenue|floatformat:2 }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-label">Gross Profit</div>
+            <div class="stat-card-value">£{{ gross_profit|floatformat:2 }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-label">Total Expenses</div>
+            <div class="stat-card-value">£{{ total_expenses|floatformat:2 }}</div>
+        </div>
+        <div class="stat-card net-profit"> <div class="stat-card-label">Net Profit</div>
+            <div class="stat-card-value">£{{ net_profit|floatformat:2 }}</div>
+        </div>
+    </div>
+{% endblock %}

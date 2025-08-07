@@ -1,0 +1,26 @@
+{% extends "inventory/base.html" %}
+
+{% block title %}Historical Reports{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Historical Reports</h1>
+    </div>
+
+    <div class="detail-section">
+        <h2>Select a Tax Year to View</h2>
+        {% if tax_years %}
+            <ul>
+                {% for year in tax_years %}
+                    <li>
+                        <a href="{% url 'yearly-report' year %}">
+                            View Report for {{ year }}/{{ year|add:1 }} Tax Year
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No historical data found.</p>
+        {% endif %}
+    </div>
+{% endblock %}
