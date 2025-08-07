@@ -5,7 +5,10 @@ from inventory.models import Pen, PenPartsUsage
 from django.db.models import Sum, F
 from decimal import Decimal
 
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
+@login_required
 def expense_list(request):
     all_expenses = Expense.objects.all()
     context = {
@@ -13,6 +16,7 @@ def expense_list(request):
     }
     return render(request, 'financials/expense_list.html', context)
 
+@login_required
 def add_expense(request):
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
@@ -25,6 +29,7 @@ def add_expense(request):
     context = {'form': form}
     return render(request, 'financials/expense_form.html', context)
 
+@login_required
 def edit_expense(request, pk):
     expense_to_edit = get_object_or_404(Expense, pk=pk)
     if request.method == 'POST':
@@ -38,7 +43,7 @@ def edit_expense(request, pk):
     context = {'form': form}
     return render(request, 'financials/expense_form.html', context)
 
-
+@login_required
 def delete_expense(request, pk):
     expense_to_delete = get_object_or_404(Expense, pk=pk)
     if request.method == 'POST':
@@ -47,6 +52,7 @@ def delete_expense(request, pk):
     
     return redirect('expense-list')
 
+@login_required
 def record_sale(request, pen_pk):
     pen_to_sell = get_object_or_404(Pen, pk=pen_pk)
 
@@ -71,6 +77,7 @@ def record_sale(request, pen_pk):
     }
     return render(request, 'financials/sale_form.html', context)
 
+@login_required
 def sale_list(request):
     all_sales = Sale.objects.all().order_by('-date_sold')
     context={
@@ -78,6 +85,7 @@ def sale_list(request):
     }
     return render(request, 'financials/sale_list.html', context)
 
+@login_required
 def edit_sale(request, pk):
     sale_to_edit = get_object_or_404(Sale, pk=pk)
     if request.method == 'POST':
@@ -94,6 +102,7 @@ def edit_sale(request, pk):
     }
     return render(request, 'financials/sale_form.html', context)
 
+@login_required
 def delete_sale(request, pk):
     sale_to_delete = get_object_or_404(Sale, pk=pk)
     if request.method == 'POST':
@@ -107,6 +116,7 @@ def delete_sale(request, pk):
     
     return redirect('sale-list')
 
+@login_required
 def dashboard(request):
     # --- 1. Calculate Total Revenue ---
     sales_revenue = Sale.objects.aggregate(

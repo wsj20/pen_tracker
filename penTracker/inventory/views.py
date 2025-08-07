@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Pen
 from .forms import PenForm, PenModelForm, PenSupplierForm, Part, PartForm, PenPartUsageForm, PenPartsUsage
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 #Display current inventory
+@login_required
 def pen_list(request):
     all_pens = Pen.objects.all()
     context = {
@@ -13,6 +14,7 @@ def pen_list(request):
     return render(request, 'inventory/pen_list.html', context)
 
 #Form to add new pen
+@login_required
 def add_pen(request):
     if request.method == 'POST':
         form = PenForm(request.POST)
@@ -26,6 +28,7 @@ def add_pen(request):
     return render(request, 'inventory/pen_form.html', context)
 
 #Delete Specified Pen
+@login_required
 def delete_pen(request, pk):
     pen_to_delete = get_object_or_404(Pen, pk=pk)
 
@@ -35,6 +38,7 @@ def delete_pen(request, pk):
     return redirect('pen-list')
 
 # MAINLY FOR JS LATER BUT ADDED NOW
+@login_required
 def edit_pen(request, pk):
     pen_to_edit = get_object_or_404(Pen, pk=pk)
 
@@ -55,6 +59,7 @@ def edit_pen(request, pk):
     return render(request, 'inventory/pen_form.html', context)
 
 #Add new pen model:
+@login_required
 def add_pen_model(request):
     if request.method == 'POST':
         form = PenModelForm(request.POST)
@@ -67,6 +72,7 @@ def add_pen_model(request):
     context = {'form': form}
     return render(request, 'inventory/pen_model_form.html', context)
 
+@login_required
 def add_pen_supplier(request):
     if request.method == "POST":
         form = PenSupplierForm(request.POST)
@@ -78,6 +84,7 @@ def add_pen_supplier(request):
     context = {'form':form}
     return render(request, 'inventory/pen_supplier_form.html', context)
 
+@login_required
 def pen_detail(request, pk):
     pen = get_object_or_404(Pen, pk=pk)
     
@@ -111,6 +118,7 @@ def pen_detail(request, pk):
     }
     return render(request, 'inventory/pen_detail.html', context)
 
+@login_required
 def part_list(request):
     all_parts = Part.objects.order_by('description')
     context = {
@@ -118,6 +126,7 @@ def part_list(request):
     }
     return render(request, 'inventory/part_list.html', context)
 
+@login_required
 def add_part(request):
     if request.method == "POST":
         form = PartForm(request.POST)
@@ -131,6 +140,7 @@ def add_part(request):
     }
     return render(request, 'inventory/part_form.html', context)
 
+@login_required
 def edit_part(request, pk):
     part_to_edit = get_object_or_404(Part, pk=pk)
 
@@ -146,6 +156,7 @@ def edit_part(request, pk):
     }
     return render(request, 'inventory/part_form.html', context)
 
+@login_required
 def delete_part(request, pk):
     pen_to_delete = get_object_or_404(Part, pk=pk)
 
@@ -154,6 +165,7 @@ def delete_part(request, pk):
         return redirect('part-list')
     return redirect('part-list')
 
+@login_required
 def delete_part_usage(request, pk):
     usage_to_delete = get_object_or_404(PenPartsUsage, pk=pk)
     # We need to know which pen's detail page to redirect back to

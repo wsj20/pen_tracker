@@ -1,56 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense List</title>
-</head>
-<body>
-    <nav>
-        <a href="{% url 'home' %}">Dashboard</a> |
-        <a href="{% url 'pen-list' %}">Pen Inventory</a> |
-        <a href="{% url 'part-list' %}">Parts Inventory</a> |
-        <a href="{% url 'expense-list' %}">Expenses</a> |
-        <a href="{% url 'sale-list' %}">All Sales</a> |
-        <form method="post" action="{% url 'logout' %}" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
-        </form>
-    </nav>
-    <h1>Expenses</h1>
-    <a href="{% url 'expense-add' %}"><button>+ Add New Expense</button></a>
-    <br><br>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Description</th>
-                <th>Date Incurred</th>
-                <th>Cost</th>
-                <th>Category</th>
-                <th>Actions</th> 
-            </tr>
-        </thead>
-        <tbody>
-            {% for expense in expenses %}
-            <tr>
-                <td>{{ expense.description }}</td>
-                <td>{{ expense.date_incurred|date:"d M Y" }}</td>
-                <td>£{{ expense.cost }}</td>
-                <td>{{ expense.get_category_display }}</td>
-                <td>
-                    <a href="{% url 'expense-edit' expense.pk %}">Edit</a>
-                    |
-                    <form method="post" action="{% url 'expense-delete' expense.pk %}" style="display: inline;">
-                        {% csrf_token %}
-                        <button type="submit" 
-                                onclick="return confirm('Are you sure you want to delete this expense: \'{{ expense.description }}\'?');">
-                            Delete
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+{% extends "inventory/base.html" %}
+
+{% block title %}Expenses{% endblock %}
+
+{% block content %}
+        <h1>Expenses</h1>
+        <a href="{% url 'expense-add' %}" class="btn btn-primary">+ Add New Expense</a>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Date Incurred</th>
+                    <th>Cost</th>
+                    <th>Category</th>
+                    <th class="actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                <tr>
+                    <td>{{ expense.description }}</td>
+                    <td>{{ expense.date_incurred|date:"d M Y" }}</td>
+                    <td>£{{ expense.cost }}</td>
+                    <td>{{ expense.get_category_display }}</td>
+                    <td class="actions">
+                        <a href="{% url 'expense-edit' expense.pk %}" class="btn btn-secondary">Edit</a>
+                        <form method="post" action="{% url 'expense-delete' expense.pk %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger"
+                                    onclick="return confirm('Are you sure you want to delete this expense: \'{{ expense.description }}\'?');">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,66 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>All Sales</title>
-</head>
-<body>
-    <nav>
-        <a href="{% url 'home' %}">Dashboard</a> |
-        <a href="{% url 'pen-list' %}">Pen Inventory</a> |
-        <a href="{% url 'part-list' %}">Parts Inventory</a> |
-        <a href="{% url 'expense-list' %}">Expenses</a> |
-        <a href="{% url 'sale-list' %}">All Sales</a> |
-        <form method="post" action="{% url 'logout' %}" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
-        </form>
-    </nav>
-    
+{% extends "inventory/base.html" %}
+
+{% block title %}All Sales{% endblock %}
+
+{% block content %}
     <h1>All Sales</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Date Sold</th>
-                <th>Pen Sold</th>
-                <th>Sale Price</th>
-                <th>Shipping Charged</th>
-                <th>Shipping Cost</th>
-                <th>Other Fees</th>
-                <th>Transaction Fees</th>
-                <th>Net Profit</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for sale in sales %}
-            <tr>
-                <td>{{ sale.date_sold|date:"d M Y" }}</td>
-                <td>
-                    <a href="{% url 'pen-detail' sale.pen.pk %}">
-                        {{ sale.pen }}
-                    </a>
-                </td>
-                <td>£{{ sale.final_sale_price }}</td>
-                <td>£{{ sale.shipping_charge }}</td>
-                <td>£{{ sale.shipping_cost }}</td>
-                <td>£{{ sale.other_fees }}</td>
-                <td>£{{ sale.transaction_fee }}</td>
-                <td>£{{ sale.pen.calculate_net_profit|floatformat:2 }}</td>
-                <td>
-                <a href="{% url 'sale-edit' sale.pk %}">Edit Sale</a>
-                |
-                <form method="post" action="{% url 'sale-delete' sale.pk %}" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit" 
-                            onclick="return confirm('Are you sure you want to delete the sale record for {{ sale.pen }}? This will reset the pen\'s status to In Stock.');">
-                        Delete
-                    </button>
-                </form>
-            </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    <a href="{% url 'dashboard' %}">Back to Dashboard</a> </body>
-</html>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date Sold</th>
+                    <th>Pen Sold</th>
+                    <th>Sale Price</th>
+                    <th>Shipping Charged</th>
+                    <th>Shipping Cost</th>
+                    <th>Other Fees</th>
+                    <th>Transaction Fee</th>
+                    <th>Net Profit</th>
+                    <th class="actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sale in sales %}
+                <tr>
+                    <td>{{ sale.date_sold|date:"d M Y" }}</td>
+                    <td>
+                        <a href="{% url 'pen-detail' sale.pen.pk %}" class="btn btn-secondary">
+                            {{ sale.pen.pen_model }}
+                        </a>
+                    </td>
+                    <td>£{{ sale.final_sale_price }}</td>
+                    <td>£{{ sale.shipping_charge }}</td>
+                    <td>£{{ sale.shipping_cost }}</td>
+                    <td>£{{ sale.other_fees }}</td>
+                    <td>£{{ sale.transaction_fee }}</td>
+                    <td>£{{ sale.pen.calculate_net_profit|floatformat:2 }}</td>
+                    <td class="actions">
+                        <a href="{% url 'sale-edit' sale.pk %}" class="btn btn-secondary">Edit Sale</a>
+                        <form method="post" action="{% url 'sale-delete' sale.pk %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger"
+                                    onclick="return confirm('Are you sure you want to delete the sale record for {{ sale.pen }}? This will reset the pen\'s status.');">
+                                Delete Sale
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
