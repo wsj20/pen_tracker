@@ -1,58 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Parts Inventory</title>
-</head>
-<body>
-    <nav>
-        <a href="{% url 'home' %}">Dashboard</a> |
-        <a href="{% url 'pen-list' %}">Pen Inventory</a> |
-        <a href="{% url 'part-list' %}">Parts Inventory</a> |
-        <a href="{% url 'expense-list' %}">Expenses</a> |
-        <a href="{% url 'sale-list' %}">All Sales</a> |
-        <form method="post" action="{% url 'logout' %}" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
-        </form>
-    </nav>
+{% extends "inventory/base.html" %}
 
+{% block title %}Parts Inventory{% endblock %}
+
+{% block content %}
     <h1>Parts Inventory</h1>
-    <a href="{% url 'part-add' %}"><button>Add New Part</button></a>
-    <br><br>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>For Model</th>
-                <th>Quantity on Hand</th>
-                <th>Cost per Unit</th>
-                <th>Description</th>
-                <th>Actions</th> </tr>
-        </thead>
-        <tbody>
-            {% for part in parts %}
-            <tr>
-                <td>{{ part.name }}</td>
-                <td>{{ part.pen_model|default:"Generic" }}</td>
-                <td>{{ part.quantity_on_hand }}</td>
-                <td>£{{ part.cost_per_unit }}</td>
-                <td>{{ part.description }}</td>
-                <td>
-                    <a href="{% url 'part-edit' part.pk %}">Edit</a>
-                    |
-                    <form method="post" action="{% url 'part-delete' part.pk %}" style="display: inline;">
-                        {% csrf_token %}
-                        <button type="submit" 
-                                onclick="return confirm('Are you sure you want to delete \'{{ part.name }}\'?');">
-                            Delete
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    <a href="{% url 'pen-list' %}">Back to Pen Inventory</a>
-</body>
-</html>
+    <a href="{% url 'part-add' %}" class="btn btn-primary">Add New Part</a>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Model</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Cost per Unit</th>
+                    <th class="actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for part in parts %}
+                <tr>
+                    <td>{{ part.name }}</td>
+                    <td>{{ part.pen_model|default:"Generic" }}</td>
+                    <td>{{ part.description|default:"--" }}</td>
+                    <td>{{ part.quantity_on_hand }}</td>
+                    <td>£{{ part.cost_per_unit }}</td>
+                    <td class="actions">
+                        <a href="{% url 'part-edit' part.pk %}" class="btn btn-secondary">Edit</a>
+                        <form method="post" action="{% url 'part-delete' part.pk %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger"
+                                    onclick="return confirm('Are you sure you want to delete \'{{ part.name }}\'?');">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

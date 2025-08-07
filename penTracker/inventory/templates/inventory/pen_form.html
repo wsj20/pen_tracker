@@ -1,30 +1,47 @@
-...
-<h1>Add/Edit Pen</h1>
-<form method="post">
-    {% csrf_token %}
+{% extends "inventory/base.html" %}
 
-    <p>
-        <label for="{{ form.pen_model.id_for_label }}">Pen Model:</label>
-        {{ form.pen_model }}
-        <a href="{% url 'pen-model-add' %}">(+) Add New</a>
-    </p>
+{% block title %}
+    {% if form.instance.pk %}
+        Edit Pen
+    {% else %}
+        Add New Pen
+    {% endif %}
+{% endblock %}
 
-    <p>
-        <label for="{{ form.supplier.id_for_label }}">Supplier:</label>
-        {{ form.supplier }}
-        <a href="{% url 'pen-supplier-add' %}">(+) Add New</a>
-    <p>
-        <label for="{{ form.colour.id_for_label }}">Colour:</label>
-        {{ form.colour }}
-    </p>
-    
-    <p>{{ form.description.label_tag }} {{ form.description }}</p>
-    <p>{{ form.acquisition_cost.label_tag }} {{ form.acquisition_cost }}</p>
-    <p>{{ form.acquisition_date.label_tag }} {{ form.acquisition_date }}</p>
-    <p>{{ form.status.label_tag }} {{ form.status }}</p>
-    <p>{{ form.refurb_note.label_tag }} {{ form.refurb_note }}</p>
-    <p>{{ form.ebay_item_id.label_tag }} {{ form.ebay_item_id }}</p>
+{% block content %}
+    <h1>
+        {% if form.instance.pk %}
+            Edit {{ form.instance.pen_model }}
+        {% else %}
+            Add a New Pen
+        {% endif %}
+    </h1>
 
-    <button type="submit">Save Pen</button>
-</form>
-...
+    <form method="post">
+        {% csrf_token %}
+
+        <p>
+            <label for="{{ form.pen_model.id_for_label }}">Pen Model:</label>
+            {{ form.pen_model }}
+            <a href="{% url 'pen-model-add' %}" class="add-new-link">(+) Add New</a>
+        </p>
+        <p>
+            <label for="{{ form.supplier.id_for_label }}">Supplier:</label>
+            {{ form.supplier }}
+            <a href="{% url 'pen-supplier-add' %}" class="add-new-link">(+) Add New</a>
+        </p>
+        <p>{{ form.colour.label_tag }}{{ form.colour }}</p>
+        <p>{{ form.description.label_tag }}{{ form.description }}</p>
+        <p>{{ form.acquisition_cost.label_tag }}{{ form.acquisition_cost }}</p>
+        <p>{{ form.acquisition_date.label_tag }}{{ form.acquisition_date }}</p>
+        <p>{{ form.status.label_tag }}{{ form.status }}</p>
+        <p>{{ form.refurb_notes.label_tag }}{{ form.refurb_notes }}</p>
+        <p>{{ form.ebay_item_id.label_tag }}{{ form.ebay_item_id }}</p>
+
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Pen</button>
+            <a href="{% url 'pen-list' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+{% endblock %}

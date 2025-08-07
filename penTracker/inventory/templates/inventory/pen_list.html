@@ -1,73 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pen Inventory</title>
-</head>
-<body>
-    <nav>
-        <a href="{% url 'home' %}">Dashboard</a> |
-        <a href="{% url 'pen-list' %}">Pen Inventory</a> |
-        <a href="{% url 'part-list' %}">Parts Inventory</a> |
-        <a href="{% url 'expense-list' %}">Expenses</a> |
-        <a href="{% url 'sale-list' %}">All Sales</a> |
-        <form method="post" action="{% url 'logout' %}" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
-        </form>
-    </nav>
+{% extends "inventory/base.html" %}
 
+{% block title %}Pen Inventory{% endblock %}
+
+{% block content %}
     <h1>Current Inventory</h1>
-
-    <a href="{% url 'pen-add' %}"><button>Add New Pen</button></a>
-    
-    <br><br>
-
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Model</th>
-                <th>Supplier</th>
-                <th>Colour</th>
-                <th>Description</th>
-                <th>Acq. Cost</th>
-                <th>Acq. Date</th>
-                <th>Status</th>
-                <th>eBay ID</th>
-                <th>Actions</th> </tr>
-        </thead>
-        <tbody>
-            {% for pen in pens %}
-            <tr>
-                <td>
-                    <a href="{% url 'pen-edit' pen.pk %}">
-                        {{ pen.pen_model }}
-                    </a>
-                </td>
-                <td>{{ pen.supplier }}</td>
-                <td>{{ pen.colour }}</td>
-                <td>{{ pen.description }}</td>
-                <td>£{{ pen.acquisition_cost }}</td>
-                <td>{{ pen.acquisition_date|date:"d M Y" }}</td>
-                <td>{{ pen.get_status_display }}</td>
-                <td>{{ pen.ebay_item_id|default:"--" }}</td>
-                
-                <td>
-                    <a href="{% url 'pen-detail' pen.pk %}">Details</a>
-                    |
-                    <form method="post" action="{% url 'pen-delete' pen.pk %}" style="display: inline;">
-                        {% csrf_token %}
-                        <button type="submit" 
-                                onclick="return confirm('Are you sure you want to delete \'{{ pen.pen_model }} ({{ pen.colour }})\'?');">
-                            Delete
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-</body>
-</html>
+    <a href="{% url 'pen-add' %}" class="btn btn-primary">Add New Pen</a>
+    <div class="table-container">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>MODEL</th>
+                    <th>SUPPLIER</th>
+                    <th>COLOUR</th>
+                    <th>DESCRIPTION</th>
+                    <th>ACQ COST</th>
+                    <th>ACQ DATE</th>
+                    <th>STATUS</th>
+                    <th>eBay ID</th>
+                    <th>ACTIONS</th> </tr>
+            </thead>
+            <tbody>
+                {% for pen in pens %}
+                <tr>
+                    <td>
+                        <a href="{% url 'pen-edit' pen.pk %}" class="btn btn-secondary">
+                            {{ pen.pen_model }}
+                        </a>
+                    </td>
+                    <td>{{ pen.supplier }}</td>
+                    <td>{{ pen.colour }}</td>
+                    <td>{{ pen.description }}</td>
+                    <td>£{{ pen.acquisition_cost }}</td>
+                    <td>{{ pen.acquisition_date|date:"d M Y" }}</td>
+                    <td>{{ pen.get_status_display }}</td>
+                    <td>{{ pen.ebay_item_id|default:"--" }}</td>
+                    
+                    <td>
+                        <a href="{% url 'pen-detail' pen.pk %}" class="btn btn-secondary">Details</a>
+                        <form method="post" action="{% url 'pen-delete' pen.pk %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger"
+                                    onclick="return confirm('Are you sure you want to delete \'{{ pen.pen_model }} ({{ pen.colour }})\'?');">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

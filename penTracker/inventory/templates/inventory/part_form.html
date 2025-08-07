@@ -1,16 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Add Part</title>
-</head>
-<body>
-    <h1>Add New Part</h1>
+{% extends "inventory/base.html" %}
+
+{% block title %}
+    {% if form.instance.pk %}
+        Edit Part
+    {% else %}
+        Add New Part
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <h1>
+        {% if form.instance.pk %}
+            Edit {{ form.instance.name }}
+        {% else %}
+            Add a New Part to Inventory
+        {% endif %}
+    </h1>
+
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Save Part</button>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Part</button>
+            <a href="{% url 'part-list' %}" class="btn btn-secondary">Cancel</a>
+        </div>
     </form>
-    <br>
-    <a href="{% url 'part-list' %}">Cancel</a>
-</body>
-</html>
+{% endblock %}

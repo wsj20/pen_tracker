@@ -1,0 +1,38 @@
+{% load static %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    <title>{% block title %}PenLedger{% endblock %}</title>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'home' %}" {% if request.resolver_match.view_name == 'home' %}class="active"{% endif %}>Dashboard</a>
+        <a href="{% url 'pen-list' %}" {% if request.resolver_match.view_name == 'pen-list' %}class="active"{% endif %}>Pen Inventory</a>
+        <a href="{% url 'part-list' %}" {% if request.resolver_match.view_name == 'part-list' %}class="active"{% endif %}>Parts Inventory</a>
+        <a href="{% url 'expense-list' %}" {% if request.resolver_match.view_name == 'expense-list' %}class="active"{% endif %}>Expenses</a>
+        <a href="{% url 'sale-list' %}" {% if request.resolver_match.view_name == 'sale-list' %}class="active"{% endif %}>All Sales</a>
+        
+        <form class="logout-form" method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
+    </nav>
+
+    <div class="container">
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+
+</body>
+</html>

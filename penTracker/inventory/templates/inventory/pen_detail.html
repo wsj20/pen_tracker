@@ -1,74 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ pen.pen_model }}</title>
-</head>
-<body>
-    <h1>{{ pen.pen_model }} ({{ pen.colour }})</h1>
+{% extends "inventory/base.html" %}
+
+{% block title %}{{ pen.pen_model }}{% endblock %}
+
+{% block content %}
     
-    <a href="{% url 'pen-list' %}">Back to Full Inventory</a>
-    <hr>
+    <div class="page-header">
+        <h1>{{ pen.pen_model }} ({{ pen.colour }})</h1>
+    </div>
+    
+    <div class="detail-grid">
+        <div>
+            <dt>Supplier:</dt>
+            <dd>{{ pen.supplier|default:"N/A" }}</dd>
+        </div>
 
-    <h3>Pen Details</h3>
-    <ul>
-        <li><strong>Supplier:</strong> {{ pen.supplier|default:"N/A" }}</li>
-        <li><strong>Description:</strong> {{ pen.description|default:"No description." }}</li>
-        <li><strong>Acquisition Cost:</strong> £{{ pen.acquisition_cost }}</li>
-        <li><strong>Acquisition Date:</strong> {{ pen.acquisition_date|date:"d M Y" }}</li>
-        <li><strong>Status:</strong> {{ pen.get_status_display }}</li>
-        <li><strong>eBay ID:</strong> {{ pen.ebay_item_id|default:"Not Listed" }}</li>
-        <li><strong>Refurbishment Notes:</strong> {{ pen.refurb_note|default:"No notes." }}</li>
-    </ul>
+        <div>
+            <dt>Description:</dt>
+            <dd>{{ pen.description|default:"No description." }}</dd>
+        </div>
 
-    <hr>
+        <div>
+            <dt>Acquisition Cost:</dt>
+            <dd>£{{ pen.acquisition_cost }}</dd>
+        </div>
 
-    <h3>Parts Used</h3>
-    {% if parts_used %}
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Part Name</th>
-                    <th>Quantity</th>
-                    <th>Cost When Used</th> <th>Actions</th>       </tr>
-            </thead>
-            <tbody>
-                {% for usage in parts_used %}
-                <tr>
-                    <td>{{ usage.part.name }}</td>
-                    <td>{{ usage.quantity_used }}</td>
-                    <td>£{{ usage.cost_at_time_of_use }}</td>
-                    <td>
-                        <form method="post" action="{% url 'part-usage-delete' usage.pk %}" style="display: inline;">
-                            {% csrf_token %}
-                            <button type="submit" onclick="return confirm('Are you sure you want to remove this part record? This will add the quantity back to your main parts inventory.');">
-                                Delete
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No parts have been recorded for this refurbishment yet.</p>
-    {% endif %}
+        <div>
+            <dt>Acquisition Date:</dt>
+            <dd>{{ pen.acquisition_date|date:"d M Y" }}</dd>
+        </div>
 
-    <br>
+        <div>
+            <dt>Status:</dt>
+            <dd>{{ pen.get_status_display }}</dd>
+        </div>
 
-    <h4>Add Part Used:</h4>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Add Part to Refurbishment</button>
-    </form>
+        <div>
+            <dt>eBay ID:</dt>
+            <dd>{{ pen.ebay_item_id|default:"Not Listed" }}</dd>
+        </div>
 
-    <h3>Sale Information</h3>
-    {% if pen.status == pen.STATUS_SOLD %}
-    <p>This pen has been sold. Details will be displayed here.</p>
-    {% else %}
-    <a href="{% url 'sale-record' pen.pk %}"><button>+ Record Sale</button></a>
-    {% endif %}
+        <div>
+            <dt>Refurbishment Notes:</dt>
+            <dd>{{ pen.refurb_notes|default:"No notes." }}</dd>
+        </div>
+    </div>
 
-</body>
-</html>
+
+    <div class="detail-section">
+        <h3>Parts Used</h3>
+        {% if parts_used %}
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Part Name</th>
+                            <th>Quantity</th>
+                            <th>Cost When Used</th>
+                            <th class="actions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usage in parts_used %}
+                        <tr>
+                            <td>{{ usage.part.name }}</td>
+                            <td>{{ usage.quantity_used }}</td>
+                            <td>£{{ usage.cost_at_time_of_use }}</td>
+                            <td class="actions">
+                                <form method="post" action="{% url 'part-usage-delete' usage.pk %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Remove this part usage record?');">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>No parts have been recorded for this refurbishment yet.</p>
+        {% endif %}
+
+        <br>
+        <h4>Add Part Used:</h4>
+        <div class="inline-form">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Add Part to Refurbishment</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="detail-section">
+        <h3>Sale Information</h3>
+        {% if pen.status == pen.STATUS_SOLD %}
+            <p>This pen has been sold. (Sale details will be displayed here).</p>
+        {% else %}
+            <a href="{% url 'sale-record' pen.pk %}" class="btn btn-primary">+ Record Sale</a>
+        {% endif %}
+    </div>
+
+{% endblock %}
