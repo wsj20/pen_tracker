@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Expense, Sale
 from .forms import ExpenseForm, SaleForm
 from inventory.models import Pen, PenPartsUsage
-from django.db.models import Sum, F, Q
+from django.db.models import Sum, F, Q, Avg
 from decimal import Decimal
 from .utils import get_tax_year_dates
 import csv
@@ -162,6 +162,13 @@ def dashboard(request):
     total_business_expenses = (refurbishment_costs + sales_shipping_costs + general_expenses).quantize(Decimal('0.01'))
     net_profit = (gross_profit - total_business_expenses).quantize(Decimal('0.01'))
 
+    sales_count = sales_this_year.count()
+    avg_profit_per_pen = (net_profit / sales_count) if sales_count > 0 else Decimal('0.00').quantize(Decimal('0.01'))
+
+    current_stock_value = Pen.objects.exclude(status=Pen.STATUS_SOLD).aggregate(
+        total=Sum('acquisition_cost')
+    )['total'] or Decimal('0.00')
+
     if net_profit >= 0:
         net_profit_class = 'is-positive'
     else:
@@ -176,6 +183,8 @@ def dashboard(request):
         'total_expenses': total_business_expenses,
         'net_profit': net_profit,
         'net_profit_class': net_profit_class,
+        'avg_profit_per_pen': avg_profit_per_pen,
+        'current_stock_value': current_stock_value,
     }
     return render(request, 'financials/dashboard.html', context)
 

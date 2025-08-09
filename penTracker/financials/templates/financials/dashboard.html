@@ -5,24 +5,33 @@
 {% block content %}
     <h1>Business Dashboard</h1>
         <h2>Overall Financials ({{ tax_year_start|date:"d M Y" }} - {{ tax_year_end|date:"d M Y" }})</h2>
-        <div class="stat-card-container">
-            <div class="stat-card">
-                <div class="stat-card-label">Total Revenue</div>
-                <div class="stat-card-value">£{{ sales_revenue|floatformat:2 }}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-card-label">Gross Profit</div>
-                <div class="stat-card-value">£{{ gross_profit|floatformat:2 }}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-card-label">Total Expenses</div>
-                <div class="stat-card-value">£{{ total_expenses|floatformat:2 }}</div>
-            </div>
-            <div class="stat-card {{ net_profit_class }}"> <div class="stat-card-label">Net Profit</div>
-                <div class="stat-card-value">£{{ net_profit|floatformat:2 }}</div>
-            </div>
+    <div class="stat-card-container">
+        <div class="stat-card">
+            <div class="stat-card-label">Avg. Profit Per Pen</div>
+            <div class="stat-card-value">£{{ avg_profit_per_pen|floatformat:2 }}</div>
         </div>
-    
+        <div class="stat-card">
+            <div class="stat-card-label">Current Stock Value</div>
+            <div class="stat-card-value">£{{ current_stock_value|floatformat:2 }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-label">Total Expenses</div>
+            <div class="stat-card-value">£{{ total_expenses|floatformat:2 }}</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-card-label">Total Revenue</div>
+            <div class="stat-card-value">£{{ sales_revenue|floatformat:2 }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-label">Gross Profit</div>
+            <div class="stat-card-value">£{{ gross_profit|floatformat:2 }}</div>
+        </div>
+        <div class="stat-card {{ net_profit_class }}">
+            <div class="stat-card-label">Net Profit</div>
+            <div class="stat-card-value">£{{ net_profit|floatformat:2 }}</div>
+        </div>
+    </div>
     <div class="detail-section">
         <h2>Year-over-Year Performance</h2>
         <p>(The comparison chart will be added here later.)</p>
