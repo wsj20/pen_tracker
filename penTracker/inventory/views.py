@@ -62,15 +62,21 @@ def edit_pen(request, pk):
 #Add new pen model:
 @login_required
 def add_pen_model(request):
+
+    next_url = request.GET.get('next', 'pen-list') 
+
     if request.method == 'POST':
         form = PenModelForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('pen-add')
+            return redirect(next_url) 
     else:
         form = PenModelForm()
-
-    context = {'form': form}
+    
+    context = {
+        'form': form,
+        'next_url': next_url #url for cancel button
+    }
     return render(request, 'inventory/pen_model_form.html', context)
 
 @login_required

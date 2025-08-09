@@ -23,7 +23,7 @@
         <p>
             <label for="{{ form.pen_model.id_for_label }}">Pen Model:</label>
             {{ form.pen_model }}
-            <a href="{% url 'pen-model-add' %}" class="add-new-link">(+) Add New</a>
+            <a href="{% url 'pen-model-add' %}?next={{ request.path|urlencode }}" class="add-new-link">(+) Add New</a>
         </p>
         <p>
             <label for="{{ form.supplier.id_for_label }}">Supplier:</label>

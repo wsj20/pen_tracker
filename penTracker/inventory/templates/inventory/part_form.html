@@ -19,7 +19,20 @@
 
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        
+        <p>{{ form.name.label_tag }} {{ form.name }}</p>
+
+        <p>
+            <label for="{{ form.pen_model.id_for_label }}">For Model:</label>
+            {{ form.pen_model }}
+            <a href="{% url 'pen-model-add' %}?next={{ request.path|urlencode }}" class="add-new-link">(+) Add New</a>
+        </p>
+
+        <p>{{ form.colour.label_tag }} {{ form.colour }}</p>
+        <p>{{ form.quantity_on_hand.label_tag }} {{ form.quantity_on_hand }}</p>
+        <p>{{ form.cost_per_unit.label_tag }} {{ form.cost_per_unit }}</p>
+        <p>{{ form.description.label_tag }} {{ form.description }}</p>
+        <p>{{ form.supplier.label_tag }} {{ form.supplier }}</p>
         
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Save Part</button>

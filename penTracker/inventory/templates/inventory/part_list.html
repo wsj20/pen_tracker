@@ -11,6 +11,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Model</th>
+                    <th>Colour</th>
                     <th>Description</th>
                     <th>Quantity</th>
                     <th>Cost per Unit</th>
@@ -22,6 +23,7 @@
                 <tr>
                     <td>{{ part.name }}</td>
                     <td>{{ part.pen_model|default:"Generic" }}</td>
+                    <td>{{ part.colour|default:"--" }}</td>
                     <td>{{ part.description|default:"--" }}</td>
                     <td>{{ part.quantity_on_hand }}</td>
                     <td>£{{ part.cost_per_unit }}</td>

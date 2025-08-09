@@ -70,6 +70,7 @@ class Pen(models.Model):
 
 class Part(models.Model):
     name = models.CharField(max_length=64)
+    colour = models.CharField(max_length=50, blank=True)
     quantity_on_hand = models.IntegerField()
     pen_model = models.ForeignKey(PenModel, on_delete=models.SET_NULL, blank=True, null=True)
     cost_per_unit = models.DecimalField(max_digits=8, decimal_places=2, blank=True, default=0)
