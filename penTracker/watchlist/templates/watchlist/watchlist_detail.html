@@ -1,0 +1,25 @@
+{% extends "inventory/base.html" %}
+{% block title %}Watchlist: {{ item.pen_model }}{% endblock %}
+{% block content %}
+    <div class="page-header">
+        <h1>Watching: {{ item.pen_model }}</h1>
+    </div>
+
+    <div class="detail-grid">
+        <div><dt>Colour</dt><dd>{{ item.colour|default:"Any" }}</dd></div>
+        <div><dt>Notes</dt><dd>{{ item.notes|default:"--" }}</dd></div>
+    </div>
+
+    <div class="detail-section">
+        <h3>Relevant Parts Currently in Stock</h3>
+        {% if relevant_parts %}
+            <ul>
+            {% for part in relevant_parts %}
+                <li>{{ part.name }} ({{ part.quantity_on_hand }} in stock)</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>You have no specific parts for this model in your inventory.</p>
+        {% endif %}
+    </div>
+{% endblock %}

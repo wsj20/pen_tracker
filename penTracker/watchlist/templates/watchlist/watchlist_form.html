@@ -1,0 +1,13 @@
+{% extends "inventory/base.html" %}
+{% block title %}Add to Watchlist{% endblock %}
+{% block content %}
+    <h1>Add New Item to Watchlist</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Add to Watchlist</button>
+            <a href="{% url 'watchlist-list' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+{% endblock %}

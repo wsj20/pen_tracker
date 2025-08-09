@@ -21,6 +21,7 @@
         <a href="{% url 'expense-list' %}" {% if request.resolver_match.view_name == 'expense-list' %}class="active"{% endif %}>Expenses</a>
         <a href="{% url 'sale-list' %}" {% if request.resolver_match.view_name == 'sale-list' %}class="active"{% endif %}>All Sales</a>
         <a href="{% url 'reports' %}" {% if request.resolver_match.view_name == 'reports' %}class="active"{% endif %}>Reports</a>
+        <a href="{% url 'watchlist-list' %}" {% if request.resolver_match.view_name == 'watchlist-list' %}class="active"{% endif %}>Watchlist</a>
 
         <form class="logout-form" method="post" action="{% url 'logout' %}">
             {% csrf_token %}

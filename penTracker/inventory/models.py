@@ -25,12 +25,14 @@ class Pen(models.Model):
 
     STATUS_IN_STOCK = 'IN_STOCK'
     STATUS_UNDER_REFURB = 'UNDER_REFURB'
+    STATUS_AWAITING_PARTS = 'AWAITING_PARTS'
     STATUS_LISTED = 'LISTED'
     STATUS_SOLD = 'SOLD'
 
     STATUS_CHOICES = [
         (STATUS_IN_STOCK, 'In Stock'),
         (STATUS_UNDER_REFURB, 'Under Refurbishment'),
+        (STATUS_AWAITING_PARTS, 'Awaiting Parts'),
         (STATUS_LISTED, 'Listed'),
         (STATUS_SOLD, 'Sold'),
     ]

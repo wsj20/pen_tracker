@@ -1,0 +1,35 @@
+{% extends "inventory/base.html" %}
+{% block title %}Watchlist{% endblock %}
+{% block content %}
+    <div class="page-header">
+        <h1>My Watchlist</h1>
+        <div><a href="{% url 'watchlist-add' %}" class="btn btn-primary">Add to Watchlist</a></div>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Pen Model</th>
+                    <th>Colour</th>
+                    <th>Notes</th>
+                    <th class="actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td><a href="{% url 'watchlist-detail' item.pk %}">{{ item.pen_model }}</a></td>
+                    <td>{{ item.colour|default:"--" }}</td>
+                    <td>{{ item.notes|default:"--" }}</td>
+                    <td class="actions">
+                        <form method="post" action="{% url 'watchlist-delete' item.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Delete this item?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

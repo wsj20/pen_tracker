@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'inventory.apps.InventoryConfig', 
     'financials.apps.FinancialsConfig', 
-    'accounts.apps.AccountsConfig', 
+    'accounts.apps.AccountsConfig',
+    'watchlist.apps.WatchlistConfig'
 ]
 
 MIDDLEWARE = [
