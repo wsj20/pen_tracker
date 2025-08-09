@@ -33,7 +33,49 @@
         </div>
     </div>
     <div class="detail-section">
-        <h2>Year-over-Year Performance</h2>
-        <p>(The comparison chart will be added here later.)</p>
-    </div>
+            <h2>Performance This Tax Year</h2>
+            <canvas id="cumulativeChart"></canvas>
+        </div>
+
+        <script>
+            const ctx = document.getElementById('cumulativeChart').getContext('2d');
+            
+            const chartLabels = {{ chart_labels|safe }};
+            const revenueData = {{ cumulative_revenue_data|safe }};
+            const profitData = {{ cumulative_profit_data|safe }};
+
+            const cumulativeChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Cumulative Revenue',
+                        data: revenueData,
+                        borderColor: 'rgb(0, 123, 255)',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        fill: true,
+                        tension: 0.1
+                    }, {
+                        label: 'Cumulative Net Profit',
+                        data: profitData,
+                        borderColor: 'rgb(40, 167, 69)',
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        fill: true,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    return '£' + value.toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
 {% endblock %}

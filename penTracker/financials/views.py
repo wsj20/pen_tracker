@@ -1,14 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.db.models import Sum, F, Q, Avg
+
 from .models import Expense, Sale
 from .forms import ExpenseForm, SaleForm
 from inventory.models import Pen, PenPartsUsage
-from django.db.models import Sum, F, Q, Avg
-from decimal import Decimal
 from .utils import get_tax_year_dates
-import csv
-from django.http import HttpResponse
 
-from django.contrib.auth.decorators import login_required
+from decimal import Decimal
+from collections import defaultdict
+from datetime import date, timedelta
+
+import csv
+import json
 
 # Create your views here.
 @login_required
@@ -174,6 +179,50 @@ def dashboard(request):
     else:
         net_profit_class = 'is-negative'
 
+    sales_in_period = Sale.objects.filter(date_sold__range=(start_date, end_date)).select_related('pen')
+    expenses_in_period = Expense.objects.filter(date_incurred__range=(start_date, end_date))
+
+    monthly_revenue = defaultdict(Decimal)
+    monthly_costs = defaultdict(Decimal)
+
+    for sale in sales_in_period:
+        month = sale.date_sold.strftime('%Y-%m')
+        
+        monthly_revenue[month] += sale.final_sale_price + sale.shipping_charge
+        
+        pen = sale.pen
+        parts_cost = pen.parts_used.aggregate(total=Sum('cost_at_time_of_use'))['total'] or Decimal('0.00')
+        total_fees = sale.transaction_fee + sale.other_fees + sale.shipping_cost
+        monthly_costs[month] += pen.acquisition_cost + parts_cost + total_fees
+
+    for expense in expenses_in_period:
+        month = expense.date_incurred.strftime('%Y-%m')
+        monthly_costs[month] += expense.cost
+
+    chart_labels = []
+    cumulative_revenue_data = []
+    cumulative_profit_data = []
+    
+    cumulative_revenue = Decimal('0.00')
+    cumulative_profit = Decimal('0.00')
+
+    current_date = start_date
+    while current_date <= end_date:
+        month_key = current_date.strftime('%Y-%m')
+        
+        cumulative_revenue += monthly_revenue[month_key]
+        net_profit_for_month = monthly_revenue[month_key] - monthly_costs[month_key]
+        cumulative_profit += net_profit_for_month
+
+        chart_labels.append(current_date.strftime('%b %Y'))
+        cumulative_revenue_data.append(cumulative_revenue)
+        cumulative_profit_data.append(cumulative_profit)
+
+        next_month = (current_date.replace(day=1) + timedelta(days=32)).replace(day=1)
+        current_date = next_month
+
+    total_revenue = cumulative_revenue
+    net_profit = cumulative_profit
 
     context = {
         'tax_year_start': start_date,
@@ -185,6 +234,10 @@ def dashboard(request):
         'net_profit_class': net_profit_class,
         'avg_profit_per_pen': avg_profit_per_pen,
         'current_stock_value': current_stock_value,
+
+        'chart_labels': json.dumps(chart_labels),
+        'cumulative_revenue_data': json.dumps([float(d) for d in cumulative_revenue_data]),
+        'cumulative_profit_data': json.dumps([float(d) for d in cumulative_profit_data]),
     }
     return render(request, 'financials/dashboard.html', context)
 
@@ -212,8 +265,6 @@ def reports_hub(request):
     }
     return render(request, 'financials/reports.html', context)
 
-# financials/views.py
-# (Your other imports and views are here)
 
 def yearly_report(request, year):
     start_date, end_date = get_tax_year_dates(year)
