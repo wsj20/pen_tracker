@@ -55,20 +55,27 @@ class Pen(models.Model):
     def __str__(self):
         return f"{self.pen_model} - {self.colour} -- {self.description}"
     
+    def calculate_total_cost(self):
+        parts_cost_result = self.parts_used.aggregate(
+            total=Sum('cost_at_time_of_use')
+        )
+        parts_cost = parts_cost_result['total'] or 0
+        
+        return self.acquisition_cost + parts_cost
+    
     def calculate_net_profit(self):
         if not hasattr(self, 'sale'):
             return None
         
-        parts_costs_result = self.parts_used.aggregate(
-            total=Sum('cost_at_time_of_use')
-        )
-
-        parts_cost = parts_costs_result['total'] or 0
-        total_fees = self.sale.transaction_fee + self.sale.other_fees
+        pen_total_cost = self.calculate_total_cost()
+        
+        sale_costs = self.sale.transaction_fee + self.sale.other_fees + self.sale.shipping_cost
+        
         revenue = self.sale.final_sale_price + self.sale.shipping_charge
-        total_costs = self.acquisition_cost + parts_cost + self.sale.shipping_cost + total_fees
-
-        return revenue - total_costs
+        
+        net_profit = revenue - (pen_total_cost + sale_costs)
+        
+        return net_profit
 
 class Part(models.Model):
     name = models.CharField(max_length=64)

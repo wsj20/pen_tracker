@@ -16,6 +16,7 @@
                     <th>ACQ COST</th>
                     <th>ACQ DATE</th>
                     <th>STATUS</th>
+                    <th>TOTAL COST</th>
                     <th>eBay ID</th>
                     <th>ACTIONS</th> </tr>
             </thead>
@@ -33,6 +34,7 @@
                     <td>£{{ pen.acquisition_cost }}</td>
                     <td>{{ pen.acquisition_date|date:"d M Y" }}</td>
                     <td>{{ pen.get_status_display }}</td>
+                    <td>£{{ pen.calculate_total_cost|floatformat:2 }}</td> <td>{{ pen.get_status_display }}</td>
                     <td>{{ pen.ebay_item_id|default:"--" }}</td>
                     
                     <td>

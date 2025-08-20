@@ -8,7 +8,7 @@ from django.db.models import F
 #Display current inventory
 @login_required
 def pen_list(request):
-    all_pens = Pen.objects.all()
+    all_pens = Pen.objects.exclude(status=Pen.STATUS_SOLD).order_by('status')
     context = {
         'pens':all_pens
     }
