@@ -89,7 +89,7 @@ class Part(models.Model):
         # Simplified string representation
         return f"{self.name} ({self.quantity_on_hand} in stock @ £{self.cost_per_unit} ea)"
     
-class PenPartsUsage(models.Model):
+class PenPartUsage(models.Model):
     pen = models.ForeignKey(Pen, on_delete=models.CASCADE, related_name='parts_used')
     part = models.ForeignKey(Part, on_delete=models.PROTECT)
     quantity_used = models.IntegerField(default=1)

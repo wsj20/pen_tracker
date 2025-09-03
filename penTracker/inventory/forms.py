@@ -1,5 +1,6 @@
+import typing
 from django import forms
-from .models import Pen, PenModel, Supplier, Part, PenPartsUsage
+from .models import Pen, PenModel, Supplier, Part, PenPartUsage
 
 #Main add pen form: /add/
 class PenForm(forms.ModelForm):
@@ -55,15 +56,19 @@ class PartForm(forms.ModelForm):
         ]
 
 class PenPartUsageForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        part_field = typing.cast(forms.ModelChoiceField, self.fields['part'])
+        
+        part_field.queryset = Part.objects.filter(quantity_on_hand__gt=0)
+        part_field.label_from_instance = lambda obj: f"{obj}"
 
     quantity_used = forms.IntegerField(
-        initial=1,
+        initial=1, 
         min_value=1
     )
 
     class Meta:
-        model = PenPartsUsage
-        fields = [
-            'part',
-            'quantity_used'
-        ]
+        model = PenPartUsage
+        fields = ['part', 'quantity_used']
