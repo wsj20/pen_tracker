@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Pen
 from .forms import PenForm, PenModelForm, PenSupplierForm, Part, PartForm, PenPartUsageForm, PenPartsUsage
 from django.contrib.auth.decorators import login_required
-from django.db.models import F
+from django.db.models import Case, When, Value, IntegerField
 # Create your views here.
 
 #Display current inventory
@@ -127,12 +127,15 @@ def pen_detail(request, pk):
 
 @login_required
 def part_list(request):
-    all_parts = Part.objects.order_by(
-        F('pen_model').asc(nulls_first=True),
-        'pen_model__brand',
-        'pen_model__name',
-        'name'
-    )
+    #only fetch parts with a quantity > 0
+    all_parts = Part.objects.filter(quantity_on_hand__gt=0).annotate(
+        is_generic=Case(
+            When(pen_model__isnull=True, then=Value(0)),
+            default=Value(1),
+            output_field=IntegerField(),
+        )
+    ).order_by('is_generic', 'pen_model__brand', 'pen_model__name', 'name')
+
     context = {
         'parts': all_parts
     }

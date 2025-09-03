@@ -79,14 +79,15 @@ class Pen(models.Model):
 
 class Part(models.Model):
     name = models.CharField(max_length=64)
-    colour = models.CharField(max_length=50, blank=True)
     quantity_on_hand = models.IntegerField()
-    pen_model = models.ForeignKey(PenModel, on_delete=models.SET_NULL, blank=True, null=True)
-    cost_per_unit = models.DecimalField(max_digits=8, decimal_places=2, blank=True, default=0)
+    cost_per_unit = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     description = models.TextField(blank=True)
-    
+    class Meta:
+        ordering = ['name'] # Simplified default ordering
+
     def __str__(self):
-        return f"{self.pen_model} - {self.name} - {self.description}"
+        # Simplified string representation
+        return f"{self.name} ({self.quantity_on_hand} in stock @ £{self.cost_per_unit} ea)"
     
 class PenPartsUsage(models.Model):
     pen = models.ForeignKey(Pen, on_delete=models.CASCADE, related_name='parts_used')

@@ -34,9 +34,8 @@
                     <td>£{{ pen.acquisition_cost }}</td>
                     <td>{{ pen.acquisition_date|date:"d M Y" }}</td>
                     <td>{{ pen.get_status_display }}</td>
-                    <td>£{{ pen.calculate_total_cost|floatformat:2 }}</td> <td>{{ pen.get_status_display }}</td>
+                    <td>£{{ pen.calculate_total_cost|floatformat:2 }}</td> 
                     <td>{{ pen.ebay_item_id|default:"--" }}</td>
-                    
                     <td>
                         <a href="{% url 'pen-detail' pen.pk %}" class="btn btn-secondary">Details</a>
                         <form method="post" action="{% url 'pen-delete' pen.pk %}" style="display: inline;">

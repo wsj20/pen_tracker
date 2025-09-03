@@ -49,8 +49,6 @@ class PartForm(forms.ModelForm):
         model = Part
         fields = [
             'name',
-            'pen_model',
-            'colour',
             'quantity_on_hand',
             'cost_per_unit',
             'description'
