@@ -127,15 +127,7 @@ def pen_detail(request, pk):
 
 @login_required
 def part_list(request):
-    #only fetch parts with a quantity > 0
-    all_parts = Part.objects.filter(quantity_on_hand__gt=0).annotate(
-        is_generic=Case(
-            When(pen_model__isnull=True, then=Value(0)),
-            default=Value(1),
-            output_field=IntegerField(),
-        )
-    ).order_by('is_generic', 'pen_model__brand', 'pen_model__name', 'name')
-
+    all_parts = Part.objects.filter(quantity_on_hand__gt=0)
     context = {
         'parts': all_parts
     }
