@@ -1,6 +1,6 @@
 import typing
 from django import forms
-from .models import Pen, PenModel, Supplier, Part, PenPartUsage
+from .models import Pen, PenModel, Supplier, Part, PenPartsUsage
 
 #Main add pen form: /add/
 class PenForm(forms.ModelForm):
@@ -70,5 +70,5 @@ class PenPartUsageForm(forms.ModelForm):
     )
 
     class Meta:
-        model = PenPartUsage
+        model = PenPartsUsage
         fields = ['part', 'quantity_used']
