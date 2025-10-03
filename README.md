@@ -28,28 +28,26 @@ The front-end is styled with custom CSS for a clean, modern and responsive user 
 
 ## Screenshots
 
-Here are a few key pages from the application:
-
 **Main Dashboard:**
-![Main Dashboard](path/to/your/dashboard_image.png)
+![Main Dashboard](images/Dashboard.png)
 
 **Pen Inventory:**
-![Pen Inventory](path/to/your/pen_inventory_image.png)
+![Pen Inventory](images/Pen_Inventory.png)
 
 **Parts Inventory:**
-![Parts Inventory](path/to/your/parts_inventory_image.png)
+![Parts Inventory](images/Parts_Inventory.png)
 
 **Expenses:**
-![Expenses List](path/to/your/expenses_image.png)
+![Expenses List](images/Expenses.png)
 
 **All Sales:**
-![All Sales List](path/to/your/all_sales_image.png)
+![All Sales List](images/All_Sales.png)
 
 **Reports:**
-![Reports Page](path/to/your/reports_image.png)
+![Reports Page](images/Reports.png)
 
 **Watchlist:**
-![Watchlist Page](path/to/your/watchlist_image.png)
+![Watchlist Page](images/Watchlist.png)
 
 ## How to Run Locally
 
