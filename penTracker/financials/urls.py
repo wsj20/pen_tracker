@@ -16,5 +16,5 @@ urlpatterns = [
 
     path('reports/', views.reports_hub, name='reports'),
     path('reports/<int:year>/', views.yearly_report, name='yearly-report'),
-    path('reports/<int:year>/download-sales/', views.download_sales_csv, name='download-sales-csv'),
+    path('reports/<int:year>/download-sales/', views.yearly_report, name='download-sales-csv'),
 ]

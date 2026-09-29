@@ -4,7 +4,9 @@
 
 {% block content %}
     <h1>Business Dashboard</h1>
-        <h2>Overall Financials ({{ tax_year_start|date:"d M Y" }} - {{ tax_year_end|date:"d M Y" }})</h2>
+    <p>Tax Year: {{ tax_year_start|date:"d M Y" }} - {{ tax_year_end|date:"d M Y" }}</p>
+
+    <h2>Personal Financials</h2>
     <div class="stat-card-container">
         <div class="stat-card">
             <div class="stat-card-label">Avg. Profit Per Pen</div>
@@ -14,68 +16,75 @@
             <div class="stat-card-label">Current Stock Value</div>
             <div class="stat-card-value">£{{ current_stock_value|floatformat:2 }}</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-card-label">Total Expenses</div>
-            <div class="stat-card-value">£{{ total_expenses|floatformat:2 }}</div>
-        </div>
+    </div>
 
+    <h2>Business Financials (HMRC SA103S)</h2>
+    <div class="stat-card-container">
         <div class="stat-card">
-            <div class="stat-card-label">Total Revenue</div>
-            <div class="stat-card-value">£{{ sales_revenue|floatformat:2 }}</div>
+            <div class="stat-card-label">Gross Turnover</div>
+            <div class="stat-card-value">£{{ gross_turnover|floatformat:2 }}</div>
         </div>
         <div class="stat-card">
-            <div class="stat-card-label">Gross Profit</div>
-            <div class="stat-card-value">£{{ gross_profit|floatformat:2 }}</div>
+            <div class="stat-card-label">Allowable Expenses</div>
+            <div class="stat-card-value">£{{ allowable_expenses|floatformat:2 }}</div>
         </div>
-        <div class="stat-card {{ net_profit_class }}">
-            <div class="stat-card-label">Net Profit</div>
+        <div class="stat-card">
+            <div class="stat-card-label">Net Business Profit</div>
             <div class="stat-card-value">£{{ net_profit|floatformat:2 }}</div>
         </div>
-    </div>
-    <div class="detail-section">
-            <h2>Performance This Tax Year</h2>
-            <canvas id="cumulativeChart"></canvas>
+        <div class="stat-card">
+            <div class="stat-card-label">Est. Class 4 Tax Reserve</div>
+            <div class="stat-card-value">£{{ tax_reserve_estimate|floatformat:2 }}</div>
         </div>
+    </div>
 
-        <script>
-            const ctx = document.getElementById('cumulativeChart').getContext('2d');
-            
-            const chartLabels = {{ chart_labels|safe }};
-            const revenueData = {{ cumulative_revenue_data|safe }};
-            const profitData = {{ cumulative_profit_data|safe }};
+    <div class="detail-section">
+        <h2>Monthly Turnover vs Net Profit</h2>
+        <canvas id="monthlyPerformanceChart"></canvas>
+    </div>
 
-            const cumulativeChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: chartLabels,
-                    datasets: [{
-                        label: 'Cumulative Revenue',
-                        data: revenueData,
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('monthlyPerformanceChart').getContext('2d');
+        
+        const chartLabels = {{ chart_labels|safe }};
+        const turnoverData = {{ chart_turnover|safe }};
+        const profitData = {{ chart_profit|safe }};
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: chartLabels,
+                datasets: [
+                    {
+                        label: 'Gross Turnover (£)',
+                        data: turnoverData,
+                        backgroundColor: 'rgba(0, 123, 255, 0.7)',
                         borderColor: 'rgb(0, 123, 255)',
-                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
-                        fill: true,
-                        tension: 0.1
-                    }, {
-                        label: 'Cumulative Net Profit',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Net Profit (£)',
                         data: profitData,
+                        backgroundColor: 'rgba(40, 167, 69, 0.7)',
                         borderColor: 'rgb(40, 167, 69)',
-                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
-                        fill: true,
-                        tension: 0.1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value, index, values) {
-                                    return '£' + value.toFixed(2);
-                                }
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '£' + value.toFixed(2);
                             }
                         }
                     }
                 }
-            });
-        </script>
+            }
+        });
+    </script>
 {% endblock %}

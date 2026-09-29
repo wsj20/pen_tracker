@@ -3,8 +3,20 @@
 {% block title %}Pen Inventory{% endblock %}
 
 {% block content %}
-    <h1>Current Inventory</h1>
-    <a href="{% url 'pen-add' %}" class="btn btn-primary">Add New Pen</a>
+    <h1>Pen Inventory</h1>
+    
+    <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <a href="{% url 'pen-list' %}" class="btn {% if current_tab == 'active' %}btn-primary{% else %}btn-secondary{% endif %}">
+                Active Stock
+            </a>
+            <a href="{% url 'pen-list' %}?status=donor" class="btn {% if current_tab == 'donor' %}btn-primary{% else %}btn-secondary{% endif %}">
+                Donor / Parts Pens
+            </a>
+        </div>
+        <a href="{% url 'pen-add' %}" class="btn btn-primary">Add New Pen</a>
+    </div>
+
     <div class="table-container">
         <table border="1">
             <thead>
@@ -18,7 +30,8 @@
                     <th>STATUS</th>
                     <th>TOTAL COST</th>
                     <th>eBay ID</th>
-                    <th>ACTIONS</th> </tr>
+                    <th>ACTIONS</th>
+                </tr>
             </thead>
             <tbody>
                 {% for pen in pens %}
@@ -28,7 +41,7 @@
                             {{ pen.pen_model }}
                         </a>
                     </td>
-                    <td>{{ pen.supplier }}</td>
+                    <td>{{ pen.supplier|default:"--" }}</td>
                     <td>{{ pen.colour }}</td>
                     <td>{{ pen.description }}</td>
                     <td>£{{ pen.acquisition_cost }}</td>
@@ -46,6 +59,10 @@
                             </button>
                         </form>
                     </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="10" style="text-align: center;">No pens found in this view.</td>
                 </tr>
                 {% endfor %}
             </tbody>

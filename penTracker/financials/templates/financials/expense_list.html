@@ -3,8 +3,8 @@
 {% block title %}Expenses{% endblock %}
 
 {% block content %}
-        <h1>Expenses</h1>
-        <a href="{% url 'expense-add' %}" class="btn btn-primary">+ Add New Expense</a>
+    <h1>Expenses</h1>
+    <a href="{% url 'expense-add' %}" class="btn btn-primary">+ Add New Expense</a>
 
     <div class="table-container">
         <table>
@@ -13,7 +13,7 @@
                     <th>Description</th>
                     <th>Date Incurred</th>
                     <th>Cost</th>
-                    <th>Category</th>
+                    <th>HMRC Category</th>
                     <th class="actions">Actions</th>
                 </tr>
             </thead>
@@ -23,7 +23,7 @@
                     <td>{{ expense.description }}</td>
                     <td>{{ expense.date_incurred|date:"d M Y" }}</td>
                     <td>£{{ expense.cost }}</td>
-                    <td>{{ expense.get_category_display }}</td>
+                    <td>{{ expense.get_hmrc_category_display }}</td>
                     <td class="actions">
                         <a href="{% url 'expense-edit' expense.pk %}" class="btn btn-secondary">Edit</a>
                         <form method="post" action="{% url 'expense-delete' expense.pk %}" style="display: inline;">
@@ -34,6 +34,10 @@
                             </button>
                         </form>
                     </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center;">No expenses recorded yet.</td>
                 </tr>
                 {% endfor %}
             </tbody>
