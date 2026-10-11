@@ -179,31 +179,47 @@ def dashboard(request):
     taxable_above_threshold = max(Decimal('0.00'), net_profit - ni_threshold)
     tax_reserve_estimate = (taxable_above_threshold * Decimal('0.06')).quantize(Decimal('0.01'))
 
-    # Visual chart analytics
+    # Visual chart analytics - generate months in strict chronological tax year order
     sales_in_period = sales_this_year.select_related('pen')
     expenses_in_period = Expense.objects.filter(date_incurred__range=(start_date, end_date))
 
     monthly_turnover = defaultdict(Decimal)
     monthly_profit = defaultdict(Decimal)
 
+    # Aggregate figures by YYYY-MM key
     for sale in sales_in_period:
-        month = sale.date_sold.strftime('%b %Y')
+        month_key = sale.date_sold.strftime('%Y-%m')
         turnover = sale.final_sale_price + sale.shipping_charge
         parts_cost = sale.pen.parts_used.aggregate(
             total=Coalesce(Sum('cost_at_time_of_use'), Decimal('0.00'), output_field=DecimalField())
         )['total']
         direct_costs = sale.pen.acquisition_cost + parts_cost + sale.transaction_fee + sale.other_fees + sale.shipping_cost
         
-        monthly_turnover[month] += turnover
-        monthly_profit[month] += (turnover - direct_costs)
+        monthly_turnover[month_key] += turnover
+        monthly_profit[month_key] += (turnover - direct_costs)
 
     for expense in expenses_in_period:
-        month = expense.date_incurred.strftime('%b %Y')
-        monthly_profit[month] -= expense.cost
+        month_key = expense.date_incurred.strftime('%Y-%m')
+        monthly_profit[month_key] -= expense.cost
 
-    chart_labels = list(monthly_turnover.keys())
-    chart_turnover = [float(monthly_turnover[m]) for m in chart_labels]
-    chart_profit = [float(monthly_profit[m]) for m in chart_labels]
+    # Build chronological datasets from start_date to end_date
+    chart_labels = []
+    chart_turnover = []
+    chart_profit = []
+
+    curr_dt = start_date.replace(day=1)
+    while curr_dt <= end_date:
+        month_key = curr_dt.strftime('%Y-%m')
+        display_label = curr_dt.strftime('%b %Y')
+
+        chart_labels.append(display_label)
+        chart_turnover.append(float(monthly_turnover[month_key]))
+        chart_profit.append(float(monthly_profit[month_key]))
+
+        # Increment month safely
+        next_month = curr_dt.month % 12 + 1
+        next_year = curr_dt.year + (1 if curr_dt.month == 12 else 0)
+        curr_dt = curr_dt.replace(year=next_year, month=next_month)
 
     context = {
         'tax_year_start': start_date,
